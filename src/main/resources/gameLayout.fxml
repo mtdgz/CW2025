@@ -25,4 +25,8 @@
     </stylesheets>
 
     <Label fx:id="scoreLabel" text="0" />
+    <Button text="Pause"
+            layoutX="100"
+            layoutY="10"
+            onAction="#pauseGame"/>
 </Pane>
