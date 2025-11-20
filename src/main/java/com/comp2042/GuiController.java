@@ -28,6 +28,9 @@ public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
 
     @FXML
+    private javafx.scene.control.Label scoreLabel;
+    
+    @FXML
     private GridPane gamePanel;
 
     @FXML
