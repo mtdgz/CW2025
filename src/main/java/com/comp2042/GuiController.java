@@ -29,7 +29,7 @@ public class GuiController implements Initializable {
 
     @FXML
     private javafx.scene.control.Label scoreLabel;
-    
+
     @FXML
     private GridPane gamePanel;
 

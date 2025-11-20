@@ -16,10 +16,10 @@ public class SimpleBoard implements Board {
     private Point currentOffset;
     private final Score score;
 
-    public SimpleBoard(int width, int height) {
+    public SimpleBoard(int height, int width) {
         this.width = width;
         this.height = height;
-        currentGameMatrix = new int[width][height];
+        currentGameMatrix = new int[height][width];
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
@@ -85,7 +85,16 @@ public class SimpleBoard implements Board {
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
-        currentOffset = new Point(4, 10);
+
+        int[][] shape = brickRotator.getCurrentShape();
+
+        int boardWidth = currentGameMatrix[0].length;
+        int brickWidth = shape[0].length;
+
+        int spawnX = (boardWidth - brickWidth) / 2;
+        int spawnY = 1;
+
+        currentOffset = new Point(spawnX, spawnY);
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
@@ -96,7 +105,26 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        int[][] currentShape = brickRotator.getCurrentShape();
+
+        com.comp2042.logic.bricks.Brick nextBrick = brickGenerator.getNextBrick();
+        int[][] nextShape;
+
+        if (nextBrick != null
+        && nextBrick.getShapeMatrix() != null
+        && !nextBrick.getShapeMatrix().isEmpty()){
+            nextShape = nextBrick.getShapeMatrix().get(0);
+        } else {
+            nextShape = new int[4][4];
+        }
+
+
+        return new ViewData(
+                currentShape,
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY(),
+                nextShape
+        );
     }
 
     @Override
