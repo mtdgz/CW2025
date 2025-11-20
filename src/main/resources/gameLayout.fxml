@@ -23,4 +23,6 @@
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
+
+    <Label fx:id="scoreLabel" text="0" />
 </Pane>
