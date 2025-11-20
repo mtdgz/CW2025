@@ -19,7 +19,7 @@ public class SimpleBoard implements Board {
     public SimpleBoard(int height, int width) {
         this.width = width;
         this.height = height;
-        currentGameMatrix = new int[width][height];
+        currentGameMatrix = new int[height][width];
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
