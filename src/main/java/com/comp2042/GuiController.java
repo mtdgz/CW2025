@@ -194,7 +194,10 @@ public class GuiController implements Initializable {
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             }
-            refreshBrick(downData.getViewData());
+
+            ViewData viewData = downData.getViewData();
+            refreshBrick(viewData);
+            refreshNextBrick(viewData);
         }
         gamePanel.requestFocus();
     }
