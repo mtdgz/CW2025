@@ -35,8 +35,8 @@ public class RandomBrickGenerator implements BrickGenerator {
 
     @Override
     public Brick getBrick() {
-        if (nextBricks.size() <= 1) {
-            nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        if(nextBricks.isEmpty()) {
+            refillBag();
         }
         return nextBricks.poll();
     }
