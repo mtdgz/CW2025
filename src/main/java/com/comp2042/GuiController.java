@@ -241,4 +241,24 @@ public class GuiController implements Initializable {
         }
         gamePanel.requestFocus();
     }
+
+    public void refreshNextBrick(ViewData viewData) {
+        int[][] next = viewData.getNextBrickData();
+
+        nextBrickPanel.getChildren().clear();
+
+        int rows = next.length;
+        int cols = next[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j <cols; j++){
+                int value = next[i][j];
+                if (value != 0){
+                    Rectangle r = new Rectangle(BRICK_SIZE,BRICK_SIZE);
+                    setRectangleData(value, r);
+                    nextBrickPanel.add(r,j,i);
+                }
+            }
+        }
+    }
 }
