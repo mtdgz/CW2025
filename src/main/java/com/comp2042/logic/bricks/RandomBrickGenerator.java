@@ -38,7 +38,13 @@ public class RandomBrickGenerator implements BrickGenerator {
         if(nextBricks.isEmpty()) {
             refillBag();
         }
-        return nextBricks.poll();
+
+        Brick current = nextBricks.poll();
+
+        if (nextBricks.isEmpty()) {
+            refillBag();
+        }
+        return current;
     }
 
     @Override
