@@ -29,4 +29,13 @@
             layoutX="100"
             layoutY="10"
             onAction="#pauseGame"/>
+
+    <GridPane fx:id="nextBrickPanel"
+           layoutX="250"
+           layoutY="20"
+              hgap="1"
+              vgap="1" />
+
+
+
 </Pane>
