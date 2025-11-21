@@ -43,6 +43,9 @@ public class RandomBrickGenerator implements BrickGenerator {
 
     @Override
     public Brick getNextBrick() {
+        if (nextBricks.isEmpty()){
+            refillBag();
+        }
         return nextBricks.peek();
     }
 }
