@@ -25,6 +25,14 @@ public class RandomBrickGenerator implements BrickGenerator {
         refillBag();
     }
 
+    private void refillBag(){
+        List<Brick> bag = new ArrayList<>(brickList);
+        Collections.shuffle(bag);
+
+        nextBricks.clear();
+        nextBricks.addAll(bag);
+    }
+
     @Override
     public Brick getBrick() {
         if (nextBricks.size() <= 1) {
