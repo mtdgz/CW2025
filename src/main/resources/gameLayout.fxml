@@ -36,6 +36,10 @@
               hgap="1"
               vgap="1" />
 
+    <Button text="New Game"
+            layoutX="20"
+            layoutY="10"
+            onAction="#newGame"/>
 
 
 </Pane>
