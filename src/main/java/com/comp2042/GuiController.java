@@ -126,6 +126,8 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+
+        refreshNextBrick(brick);
     }
 
     private Paint getFillColor(int i) {
