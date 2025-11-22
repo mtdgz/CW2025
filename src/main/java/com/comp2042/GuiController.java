@@ -26,6 +26,8 @@ import java.util.ResourceBundle;
 public class GuiController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
+    @FXML
+    public BorderPane gameBoard;
 
     @FXML
     private javafx.scene.control.Label scoreLabel;
