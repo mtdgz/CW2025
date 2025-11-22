@@ -81,7 +81,7 @@
 }
 
 .score-title {
-    -fx-text-fill #bbbbbb;
+    -fx-text-fill: #bbbbbb;
     -fx-font-size: 12px;
     -fx-dont-weight: bold;
     -fx-letter-spacing: 1px;
