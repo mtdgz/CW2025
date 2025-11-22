@@ -42,6 +42,9 @@ public class GuiController implements Initializable {
     @FXML
     private GameOverPanel gameOverPanel;
 
+    @FXML
+    private GridPane nextBrickPanel;
+
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
