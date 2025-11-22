@@ -70,3 +70,48 @@
     -fx-fill: yellow;
     -fx-text-fill: yellow;
 }
+
+.score-panel{
+    -fx-padding: 10;
+    -fx-background-color: #222;
+    -fx-background-radius: 8;
+    -fx-border-color: #555;
+    -fx-border-radius:8;
+    -fx-border-width:1;
+}
+
+.score-title {
+    -fx-text-fill #bbbbbb;
+    -fx-font-size: 12px;
+    -fx-dont-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.score-value{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+    -fx--dont-weight:bold;
+}
+
+.next-title{
+    -fx-padding: 5;
+    -fx-background-color: #111;
+    -fx-background-radius: 8;
+    -fx-border-color: #555;
+    -fx-border-radius: 8;
+    -fx-border-width:1;
+}
+
+.control-panel{
+    -fx-padding: 5 0 0 0;
+}
+
+.control-button{
+    -fx-background-radius:8;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12 6 12;
+}
+
+.control-button:hover {
+    -fx-opacity: 0.85
+}
