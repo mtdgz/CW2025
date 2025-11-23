@@ -153,6 +153,7 @@ public class SimpleBoard implements Board {
                 currentShape,
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),
+                ghostY,
                 nextShape
         );
     }
