@@ -25,7 +25,7 @@
             </VBox>
 
             <VBox spacing="5">
-                <Label text="Next" styleClass="next-title"/>
+                <Label text="Next Brick" styleClass="next-title"/>
                 <GridPane fx:id="nextBrickPanel"
                           hgap="1"
                           vgap="1"
