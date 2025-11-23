@@ -35,6 +35,17 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    private int computeGhostY(){
+        int [][] shape = brickRotator.getCurrentShape();
+        int x = currentOffset.x;
+        int ghostY = currentOffset.y;
+
+        while(canPlace(shape, x, ghostY + 1)){
+            ghostY++;
+        }
+        return ghostY;
+    }
+
     public SimpleBoard(int height, int width) {
         this.width = width;
         this.height = height;
