@@ -148,6 +148,7 @@ public class SimpleBoard implements Board {
             nextShape = new int[4][4];
         }
 
+        int ghostY = computeGhostY();
 
         return new ViewData(
                 currentShape,
