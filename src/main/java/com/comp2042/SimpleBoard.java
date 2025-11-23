@@ -16,6 +16,25 @@ public class SimpleBoard implements Board {
     private Point currentOffset;
     private final Score score;
 
+    private boolean canPlace(int [][] shape, int x, int y){
+        for(int row = 0; row < shape.length; row++){
+            for( int col = 0; col < shape[col].length; col++){
+                if (shape[row][col] == 0) continue;
+                    int boardX = x + col;
+                    int boardY = y + row;
+
+                if (boardX < 0 || boardX >= width || boardY < 0 || boardY >= height) {
+                    return false;
+                }
+
+                if (currentGameMatrix[boardY][boardX] != 0){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public SimpleBoard(int height, int width) {
         this.width = width;
         this.height = height;
