@@ -20,6 +20,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.net.URL;
 import java.util.ResourceBundle;
