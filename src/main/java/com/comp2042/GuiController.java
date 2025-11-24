@@ -279,4 +279,45 @@ public class GuiController implements Initializable {
             }
         }
     }
+
+    private void drawGhost(ViewData brick){
+        for(Rectangle r : ghostRects){
+            gamePanel.getChildren().remove(r);
+        }
+        ghostRects.clear();
+
+        int ghostY = brick.getGhostYPosition();
+        if (ghostY < 0){
+            return;
+        }
+
+        int[][] data = brick.getBrickData();
+        int x = brick.getxPosition();
+
+        for (int row = 0; row < data.length; row++){
+            for(int col = 0; col < data[row].length; col++){
+                int value = data[row][col];
+                if (value==0) continue;
+
+                int boardRow = ghostY + row;
+                int boardCol = x + col;
+
+                if(boardRow<2){
+                    continue;
+                }
+
+                Rectangle r = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                setRectangleData(value, r);
+                r.setOpacity(GHOST_OPACITY);
+
+                int visibleRow = boardRow - 2;
+
+                GridPane.setColumnIndex(r,boardCol);
+                GridPane.setRowIndex(r,visibleRow);
+
+                gamePanel.getChildren().add(r);
+                ghostRects.add(r);
+            }
+        }
+    }
 }
