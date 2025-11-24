@@ -18,7 +18,8 @@ public class SimpleBoard implements Board {
 
     private boolean canPlace(int [][] shape, int x, int y){
         for(int row = 0; row < shape.length; row++){
-            for( int col = 0; col < shape[col].length; col++){
+            if (shape[row] == null) continue;
+            for( int col = 0; col < shape[row].length; col++){
                 if (shape[row][col] == 0) continue;
                     int boardX = x + col;
                     int boardY = y + row;
