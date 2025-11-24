@@ -50,6 +50,9 @@ public class GuiController implements Initializable {
     @FXML
     private GridPane nextBrickPanel;
 
+    @FXML
+    private final List<Rectangle> ghostRects = new ArrayList<>();
+
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
