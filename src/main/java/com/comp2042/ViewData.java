@@ -31,4 +31,8 @@ public final class ViewData {
     public int[][] getNextBrickData() {
         return MatrixOperations.copy(nextBrickData);
     }
+
+    public int getGhostYPosition(){
+        return  ghostYPosition;
+    }
 }
