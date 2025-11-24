@@ -24,7 +24,11 @@ public class SimpleBoard implements Board {
                     int boardX = x + col;
                     int boardY = y + row;
 
-                if (boardX < 0 || boardX >= width || boardY < 0 || boardY >= height) {
+                if (boardY<0){
+                continue;
+                }
+
+                    if (boardX < 0 || boardX >= width || boardY >= height) {
                     return false;
                 }
 
