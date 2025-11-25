@@ -55,6 +55,14 @@ public class GuiController implements Initializable {
     @FXML
     private final List<Rectangle> ghostRects = new ArrayList<>();
 
+    private Paint cobblestonePaint;
+    private Paint copperPaint;
+    private Paint diamondPaint;
+    private Paint dirtPaint;
+    private Paint glowstonePaint;
+    private Paint obsidianPaint;
+    private Paint sandstonePaint;
+    
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
