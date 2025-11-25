@@ -79,7 +79,35 @@ public class GuiController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
+        URL fontUrl = getClass().getResource("/digital.ttf");
+        if (fontUrl != null) {
+            Font.loadFont((fontUrl.toExternalForm()),38);
+        } else{
+            System.out.println("digital.ttf not found");
+        }
+
+        cobblestonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Cobblestone.png").toExternalForm())
+        );
+        copperPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Copper.png").toExternalForm())
+        );
+        diamondPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Diamond.png").toExternalForm())
+        );
+        dirtPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Dirt.png").toExternalForm())
+        );
+        glowstonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Glowstone.png").toExternalForm())
+        );
+        obsidianPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Obsidian.png").toExternalForm())
+        );
+        sandstonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Sandstone.png").toExternalForm())
+        );
+
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
