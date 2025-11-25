@@ -188,7 +188,7 @@ public class GuiController implements Initializable {
                 returnPaint = Color.AQUA;
                 break;
             case 2:
-                returnPaint = Color.BLUEVIOLET;
+                returnPaint = copperPaint;
                 break;
             case 3:
                 returnPaint = diamondPaint;
