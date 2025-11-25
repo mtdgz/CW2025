@@ -203,7 +203,7 @@ public class GuiController implements Initializable {
                 returnPaint = Color.BEIGE;
                 break;
             case 7:
-                returnPaint = Color.BURLYWOOD;
+                returnPaint = sandstonePaint;
                 break;
             default:
                 returnPaint = Color.WHITE;
