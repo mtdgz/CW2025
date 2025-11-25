@@ -200,7 +200,7 @@ public class GuiController implements Initializable {
                 returnPaint = Color.RED;
                 break;
             case 6:
-                returnPaint = Color.BEIGE;
+                returnPaint = obsidianPaint;
                 break;
             case 7:
                 returnPaint = sandstonePaint;
