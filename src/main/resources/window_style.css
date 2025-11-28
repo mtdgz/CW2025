@@ -1,5 +1,10 @@
 .root {
-    -fx-background-image: url("background_image.png");
+    -fx-background-image: url("textures/mcbackground.png");
+    -fx-background-color: #0b0f10;
+    -fx-background-repeat: repeat;
+    -fx-background-position: center center;
+    -fx-background-size: cover;
+    -fx-font-family:"Minecraft";
 }
 
 .nextBrick {
