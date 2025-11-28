@@ -23,10 +23,22 @@
 }
 
 .gameBoard {
-    -fx-border-color: linear-gradient(#2A5058, #61a2b1);
-    -fx-border-width: 12px;
-    -fx-border-radius: 12px;
+    -fx-border-color: #3a2a16;
+    -fx-border-width: 12;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+
+    -fx-background-color:
+        linear-gradient(#1c1308, #120c05),
+        rgba(0,0,0,0.7);
 }
+
+#gamePanel {
+    -fx-background-image: url("textures/brick.png");
+    -fx-background-size: cover;
+    -fx-border-color: #5f4a32;
+    -fx-border-width: 3;
+    }
 
 .nextBrickLabel {
     -fx-font-family: "Let's go Digital";
