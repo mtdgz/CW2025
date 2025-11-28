@@ -143,5 +143,10 @@
 }
 
 .control-button:hover {
-    -fx-opacity: 0.85
+    -fx-background-color: linear-gradient(#8c5a30, #5a371c);
+    -fx-opacity: 0.95;
+}
+
+.control-button:pressed{
+    -fx-background-color: linear-gradient(#3c2413, #29170b);
 }
