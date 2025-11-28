@@ -11,6 +11,12 @@
 <Pane fx:controller="com.comp2042.GuiController"
       xmlns:fx="http://javafx.com/fxml">
 
+    <top>
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="TETRIS" styleClass="tetris-title"/>
+        </VBox>
+    </top>
+
     <HBox spacing="20">
         <BorderPane styleClass="gameBoard" fx:id="gameBoard">
             <center>
