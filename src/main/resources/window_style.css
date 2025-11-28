@@ -95,10 +95,10 @@
 }
 
 .scoreClass{
-    -fx-font-family: "Let's go Digital";
-    -fx-font-size: 38;
-    -fx-fill: yellow;
-    -fx-text-fill: yellow;
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 28;
+    -fx-text-fill: #f8f0c8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.9),4,0.6,0,0);
 }
 
 .score-panel{
