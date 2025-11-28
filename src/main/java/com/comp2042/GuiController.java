@@ -58,7 +58,7 @@ public class GuiController implements Initializable {
     private Paint cobblestonePaint;
     private Paint copperPaint;
     private Paint diamondPaint;
-    private Paint dirtPaint;
+    private Paint logPaint;
     private Paint glowstonePaint;
     private Paint obsidianPaint;
     private Paint sandstonePaint;
