@@ -157,3 +157,9 @@
 .control-button:pressed{
     -fx-background-color: linear-gradient(#3c2413, #29170b);
 }
+
+.menu-root{
+    -fx-background-image: url("textures/homebackground.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
