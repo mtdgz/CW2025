@@ -95,8 +95,8 @@ public class GuiController implements Initializable {
         diamondPaint = new ImagePattern(
                 new Image(getClass().getResource("/textures/Diamond.png").toExternalForm())
         );
-        dirtPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Dirt.png").toExternalForm())
+        logPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Log.png").toExternalForm())
         );
         glowstonePaint = new ImagePattern(
                 new Image(getClass().getResource("/textures/Glowstone.png").toExternalForm())
