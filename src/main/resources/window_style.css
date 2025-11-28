@@ -103,7 +103,7 @@
 
 .score-panel{
     -fx-padding: 10;
-    -fx-background-color: #222;
+    -fx-background-color: linear-gradient(#1c1308,#120c05);
     -fx-background-radius: 8;
     -fx-border-color: #5f4a32;
     -fx-border-radius:8;
