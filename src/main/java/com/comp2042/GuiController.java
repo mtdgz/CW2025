@@ -52,7 +52,6 @@ public class GuiController implements Initializable {
     @FXML
     private GridPane nextBrickPanel;
 
-    @FXML
     private final List<Rectangle> ghostRects = new ArrayList<>();
 
     private Paint cobblestonePaint;
@@ -62,7 +61,6 @@ public class GuiController implements Initializable {
     private Paint glowstonePaint;
     private Paint obsidianPaint;
     private Paint sandstonePaint;
-    
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
@@ -154,7 +152,6 @@ public class GuiController implements Initializable {
                 gamePanel.add(rectangle, j, i - 2);
             }
         }
-
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
