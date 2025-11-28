@@ -45,6 +45,10 @@
     -fx-padding: 8;
     -fx-font-size: 16px;
     -fx-text-fill: yellow;
+    -fx-border-color: #5f4a32;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
 }
 
 .ipad-dark-grey {
