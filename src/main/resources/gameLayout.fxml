@@ -54,22 +54,4 @@
         <URL value="@window_style.css"/>
     </stylesheets>
 
-    <Label fx:id="scoreLabel" text="0" />
-    <Button text="Pause"
-            layoutX="100"
-            layoutY="10"
-            onAction="#pauseGame"/>
-
-    <GridPane fx:id="nextBrickPanel"
-           layoutX="250"
-           layoutY="20"
-              hgap="1"
-              vgap="1" />
-
-    <Button text="New Game"
-            layoutX="20"
-            layoutY="10"
-            onAction="#newGame"/>
-
-
 </Pane>
