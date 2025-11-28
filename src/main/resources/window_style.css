@@ -137,7 +137,14 @@
 }
 
 .control-button{
-    -fx-background-radius:8;
+    -fx-background-color: linear-gradient(#6b4423, #4a2f18);
+    -fx-text-fill: #f8f0c8;
+    -fx-background-radius: 6;
+    -fx-border-color: #d2a965;
+    -fx-border-radius:6;
+    -fx-border-width:1;
+    -fx-font-family:"Minecraft";
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-padding: 6 12 6 12;
 }
