@@ -21,8 +21,8 @@ public class SimpleBoard implements Board {
             if (shape[row] == null) continue;
             for( int col = 0; col < shape[row].length; col++){
                 if (shape[row][col] == 0) continue;
-                    int boardX = x + col;
-                    int boardY = y + row;
+                int boardX = x + col;
+                int boardY = y + row;
 
                 if (boardY<0){
                 continue;
