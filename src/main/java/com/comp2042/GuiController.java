@@ -194,7 +194,7 @@ public class GuiController implements Initializable {
                 returnPaint = diamondPaint;
                 break;
             case 4:
-                returnPaint = dirtPaint;
+                returnPaint = logPaint;
                 break;
             case 5:
                 returnPaint = glowstonePaint;
