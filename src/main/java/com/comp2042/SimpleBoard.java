@@ -201,4 +201,19 @@ public class SimpleBoard implements Board {
         score.reset();
         createNewBrick();
     }
+
+    private boolean handlePlayerDeath(){
+        if(playerState.hasTotem()){
+            playerState.consumeTotem();
+
+            for (int y = 0; y < Math.min(2, height); y++){
+                for(int x=0; x< width; x++){
+                    currentGameMatrix[y][x] = BLOCK_EMPTY;
+                }
+            }
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
