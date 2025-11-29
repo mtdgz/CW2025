@@ -180,3 +180,27 @@
     -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),4,0.6,0,0);
     -fx-padding: 0 0 10 0;
 }
+
+.control-button{
+    -fx-background-color: linear-gradient(#3b7e3d, #2c5a2c);
+    -fx-text-fill: #f8f0c8;
+    -fx-background-radius: 4;
+    -fx-border-color: #b2ff66;
+    -fx-border-radius:4;
+    -fx-border-width:1;
+    -fx-font-family:"Minecraft";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16 8 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 3, 0.7, 0, 1);
+}
+
+.menu-button:hover{
+    -fx-background-color: linear-gradient(#4fb14f, #346b34);
+    -fx-cursor: hand;
+}
+
+.menu-button:pressed{
+    -fx-background-color: linear-gradient(#204020, #182f18);
+    -fx-translate-y: 1;
+}
