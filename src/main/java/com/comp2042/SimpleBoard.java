@@ -17,6 +17,15 @@ public class SimpleBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private final PlayerState playerState;
+
+    private static final int BLOCK_EMPTY = 0;
+    private static final int BLOCK_SKELETON= 8;
+    private static final int BLOCk_ZOMBIE = 9;
+    private static final int BLOCK_TNT = 10;
+    private static final int BLOCK_LAVA = 11;
+
+    private final Random rng = new Random()
 
     private boolean canPlace(int [][] shape, int x, int y){
         for(int row = 0; row < shape.length; row++){
