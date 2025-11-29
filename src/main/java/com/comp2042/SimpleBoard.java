@@ -251,4 +251,21 @@ public class SimpleBoard implements Board {
             }
         }
     }
+    private void bossTick(){
+        if(!playerState.isBossSpawned() || playerState.isBossDead()){
+            return;
+        }
+        java.util.List<Point> candidates = new java.util.ArrayList<>();
+        for (int y=0; y<height; y++){
+            for(int x=0; x<width;x++){
+                int v = currentGameMatrix[y][x];
+                if (v != BLOCK_EMPTY && v != BLOCK_ZOMBIE && v != BLOCK_SKELETON){
+                    candidates.add(new Point(x,y));
+                }
+            }
+        }
+        if (candidates.isEmpty()){
+            return;
+        }
+    }
 }
