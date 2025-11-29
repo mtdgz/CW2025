@@ -223,4 +223,19 @@ public class SimpleBoard implements Board {
             return true;
         }
     }
+
+    private void spawnZombieBoss(){
+        int centerX = width / 2;
+        int y = 2;
+
+        for(int dy = 0 ; dy < 2; dy++){
+            for (int dx = 0; dx < 2; dx++){
+                int bx = centerX + dx;
+                int by = y + dy;
+                if (bx >= 0 && bx < width && by < height) {
+                    currentGameMatrix[by][bx] = BLOCK_ZOMBIE;
+                }
+            }
+        }
+    }
 }
