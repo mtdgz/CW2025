@@ -5,6 +5,8 @@ import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
 
 import java.awt.*;
+import java.awt.Point;
+import java.util.Random;
 
 public class SimpleBoard implements Board {
 
