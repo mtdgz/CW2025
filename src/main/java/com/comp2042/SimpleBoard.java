@@ -267,5 +267,8 @@ public class SimpleBoard implements Board {
         if (candidates.isEmpty()){
             return;
         }
+
+        Point p = candidates.get(rng.nextInt(candidates.size()));
+        currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
     }
 }
