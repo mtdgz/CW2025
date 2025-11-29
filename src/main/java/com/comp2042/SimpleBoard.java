@@ -192,6 +192,19 @@ public class SimpleBoard implements Board {
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
+
+        int linesRemoved = clearRow.getLinesRemoved();
+        if(linesRemoved > 0){
+            playerState.addLinesCleared(linesRemoved);
+            if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 20) {
+                spawnZombieBoss(); //spawn once for now, change later
+                playerState.setBossSpawned(true);
+            }
+
+            if (playerState.isBossSpawned() && !playerState.isBossDead()){
+                playerState.damageBoss(linesRemoved * 10);
+            }
+        }
         return clearRow;
 
     }
