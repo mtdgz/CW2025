@@ -291,4 +291,21 @@ public class SimpleBoard implements Board {
             playerState.setDestroyBlockCooldownEnd(now + 5000L);
         }
     }
+
+    public void useAbilityTwo() {
+        long now = System.currentTimeMillis();
+        if (playerState.getCharacterType() == CharacterType.STEVE) {
+            if (now < playerState.getTntCooldownEnd()) {
+                return;
+            }
+            marktTntUnder();
+            playerState.setTntCooldownEnd(now + 10000L);
+        } else {
+            if (now < playerState.getLavaCooldownEnd()) {
+                return;
+            }
+            dropLavaColumn();
+            playerState.setLavaCooldownEnd(now + 10000L);
+        }
+    }
 }
