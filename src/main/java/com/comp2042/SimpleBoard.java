@@ -58,6 +58,7 @@ public class SimpleBoard implements Board {
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
+        this.playerState = new PlayerState(CharacterType.STEVE);
     }
 
     @Override
