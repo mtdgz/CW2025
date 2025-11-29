@@ -4,7 +4,7 @@
     -fx-background-repeat: repeat;
     -fx-background-position: center center;
     -fx-background-size: cover;
-    -fx-font-family:"Minecraft";
+    -fx-font-family:"Minecraft Ten";
 }
 
 .nextBrick {
@@ -41,7 +41,7 @@
     }
 
 .nextBrickLabel {
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Minecraft Ten";
     -fx-padding: 8;
     -fx-font-size: 16px;
     -fx-text-fill: yellow;
@@ -60,8 +60,7 @@
     -fx-background-insets: 0, 1, 4, 5, 6;
     -fx-background-radius: 9, 8, 5, 4, 3;
     -fx-padding: 8;
-    /*-fx-font-family: "Helvetica";*/
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Minecraft Ten";
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -95,7 +94,7 @@
 }
 
 .scoreClass{
-    -fx-font-family: "Minecraft";
+    -fx-font-family: "Minecraft Ten";
     -fx-font-size: 28;
     -fx-text-fill: #f8f0c8;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.9),4,0.6,0,0);
@@ -143,7 +142,7 @@
     -fx-border-color: #d2a965;
     -fx-border-radius:6;
     -fx-border-width:1;
-    -fx-font-family:"Minecraft";
+    -fx-font-family:"Minecraft Ten";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-padding: 6 14 6 14;
@@ -159,14 +158,14 @@
 }
 
 .menu-root{
-    -fx-background-image: url("textures/homebackground.jpg");
+    -fx-background-image: url("textures/homeBackground.jpg");
     -fx-background-size: cover;
     -fx-background-position: center;
-    -fx-font-family:"Minecraft";
+    -fx-font-family:"Minecraft Ten";
 }
 
 .menu-title-main{
-    -fx-font-family: "Minecraft";
+    -fx-font-family: "Minecraft Ten";
     -fx-font-size: 40;
     -fx-text-fill: #ffeaa7;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.9), 6, 0.7, 0, 0);
@@ -174,21 +173,21 @@
 }
 
 .menu-title-sub{
-    -fx-font-family: "Minecraft";
+    -fx-font-family: "Minecraft Ten";
     -fx-font-size: 18;
     -fx-text-fill: #dfe8e9;
     -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),4,0.6,0,0);
     -fx-padding: 0 0 10 0;
 }
 
-.control-button{
+.menu-button{
     -fx-background-color: linear-gradient(#3b7e3d, #2c5a2c);
     -fx-text-fill: #f8f0c8;
     -fx-background-radius: 4;
     -fx-border-color: #b2ff66;
     -fx-border-radius:4;
     -fx-border-width:1;
-    -fx-font-family:"Minecraft";
+    -fx-font-family:"Minecraft Ten";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-padding: 8 16 8 16;
