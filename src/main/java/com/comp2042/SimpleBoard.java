@@ -274,4 +274,21 @@ public class SimpleBoard implements Board {
         Point p = candidates.get(rng.nextInt(candidates.size()));
         currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
     }
+
+    public void useAbilityOne() {
+        long now = System.currentTimeMillis();
+        if (playerState.getCharacterType() == CharacterType.STEVE) {
+            if (now < playerState.getPlaceBlockCooldownEnd()) {
+                return;
+            }
+            placeSupportBlockUnder();
+            playerState.setPlaceBlockCooldownEnd(now + 5000L);
+        } else {
+            if (now < playerState.getDestroyBlockCooldownEnd()) {
+                return;
+            }
+            destroyBlockUnderPiece();
+            playerState.setDestroyBlockCooldownEnd(now + 5000L);
+        }
+    }
 }
