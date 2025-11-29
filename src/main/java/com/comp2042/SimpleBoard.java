@@ -21,7 +21,7 @@ public class SimpleBoard implements Board {
 
     private static final int BLOCK_EMPTY = 0;
     private static final int BLOCK_SKELETON= 8;
-    private static final int BLOCk_ZOMBIE = 9;
+    private static final int BLOCK_ZOMBIE = 9;
     private static final int BLOCK_TNT = 10;
     private static final int BLOCK_LAVA = 11;
 
