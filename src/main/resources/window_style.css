@@ -162,4 +162,5 @@
     -fx-background-image: url("textures/homebackground.jpg");
     -fx-background-size: cover;
     -fx-background-position: center;
+    -fx-font-family:"Minecraft";
 }
