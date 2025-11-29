@@ -25,7 +25,7 @@ public class SimpleBoard implements Board {
     private static final int BLOCK_TNT = 10;
     private static final int BLOCK_LAVA = 11;
 
-    private final Random rng = new Random()
+    private final Random rng = new Random();
 
     private boolean canPlace(int [][] shape, int x, int y){
         for(int row = 0; row < shape.length; row++){
