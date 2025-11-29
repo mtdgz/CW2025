@@ -82,6 +82,9 @@ public class SimpleBoard implements Board {
             return false;
         } else {
             currentOffset = p;
+
+            bossTick();
+
             return true;
         }
     }
