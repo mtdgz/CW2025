@@ -142,7 +142,14 @@ public class SimpleBoard implements Board {
         int spawnY = 1;
 
         currentOffset = new Point(spawnX, spawnY);
-        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+
+        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+
+        if(!conflict){
+            return false;
+        }
+
+        return handlePlayerDeath();
     }
 
     @Override
