@@ -222,6 +222,9 @@ public class SimpleBoard implements Board {
     public void newGame() {
         currentGameMatrix = new int[height][width];
         score.reset();
+
+        playerState.setX(width/2);
+        playerState.setY(0);
         createNewBrick();
     }
 
