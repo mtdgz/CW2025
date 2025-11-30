@@ -40,5 +40,10 @@ public class HomeController {
     @FXML
     public void onChooseCharacter(){
 
+        Stage stage = getStageFromEvent(event);
+        Scene scene = new Scene(root, 460, 510);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 }
