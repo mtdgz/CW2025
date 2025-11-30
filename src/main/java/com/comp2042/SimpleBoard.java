@@ -331,7 +331,27 @@ public class SimpleBoard implements Board {
                 return;
             }
             dropLavaColumn();
-            playerState.setLavaCooldownEnd(now + 10000L);
+            playerState.setLavaCooldownEnd(now + 50000L);
+        }
+    }
+    private void marktTntUnder(){
+        int x = playerState.getX();
+        int y = playerState.getY() + 1;
+
+        if (x<0 || x >= width || y <0 || y >= height){
+            return;
+        }
+
+        if(currentGameMatrix[y][x] == BLOCK_EMPTY ||
+                currentGameMatrix[y][x] == BLOCK_SKELETON ||
+                currentGameMatrix[y][x] == BLOCK_TNT);
+    }
+
+    private void dropLavaColumn(){
+        int x = playerState.getX();
+
+        if(x<0 || x>= width){
+            return;
         }
         for (int y = playerState.getY() + 1; y < height; y++){
             int v = currentGameMatrix[y][x];
