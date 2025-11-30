@@ -258,6 +258,25 @@ public class GuiController implements Initializable {
         }
     }
 
+    private void updatePlayerPosition(ViewData brick) {
+        if (playerRect == null){
+            return;
+        }
+
+        int pX = brick.getPlayerX();
+        int pY = brick.getPlayerY();
+
+        int visibleRow = pY - 2;
+        if (visibleRow < 0){
+            playerRect.setVisible(false);
+            return;
+        }
+
+        playerRect.setVisible(true);
+        GridPane.setColumnIndex(playerRect, pX);
+        GridPane.setRowIndex(playerRect, visibleRow);
+    }
+
     public void refreshGameBackground(int[][] board) {
         for (int i = 2; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
