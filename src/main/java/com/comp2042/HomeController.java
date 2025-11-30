@@ -38,7 +38,9 @@ public class HomeController {
     }
 
     @FXML
-    public void onChooseCharacter(){
+    public void onChooseCharacter(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/characterSelect.fxml"));
+        Parent root = loader.load();
 
         Stage stage = getStageFromEvent(event);
         Scene scene = new Scene(root, 460, 510);
