@@ -11,4 +11,9 @@ public interface InputEventListener {
     ViewData onRotateEvent(MoveEvent event);
 
     void createNewGame();
+
+    void onPlayerMove(int dx, int dy);
+
+    void onAbilityOne();
+    void onAbilityTwo();
 }
