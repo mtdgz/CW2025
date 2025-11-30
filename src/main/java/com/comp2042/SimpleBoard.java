@@ -185,7 +185,9 @@ public class SimpleBoard implements Board {
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),
                 nextShape,
-                ghostY
+                ghostY,
+                playerX,
+                playerY
         );
     }
 
