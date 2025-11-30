@@ -333,5 +333,16 @@ public class SimpleBoard implements Board {
             dropLavaColumn();
             playerState.setLavaCooldownEnd(now + 10000L);
         }
+        for (int y = playerState.getY() + 1; y < height; y++){
+            int v = currentGameMatrix[y][x];
+
+            if (v == BLOCK_ZOMBIE){
+                playerState.damageBoss(10);
+            }
+            if(v != BLOCK_EMPTY && v != BLOCK_SKELETON && v != BLOCK_ZOMBIE){
+                break;
+            }
+            currentGameMatrix[y][x] = BLOCK_LAVA;
+        }
     }
 }
