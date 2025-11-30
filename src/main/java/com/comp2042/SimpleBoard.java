@@ -351,6 +351,30 @@ public class SimpleBoard implements Board {
         explodeAt(x,y);
     }
 
+    private void explodeAt(int cx, int cy){
+        for (int dy = -1; dy <= 1; dy++) {
+            int yy = cy + dy;
+            if (yy < 0 || yy >= height) continue;
+
+            for (int dx = -1; dx <= 1; dx++) {
+                int xx = cx + dx;
+                if (xx < 0 || xx >= width) continue;
+
+                int val = currentGameMatrix[yy][xx];
+
+                if (val == BLOCK_ZOMBIE) {
+                    playerState.damageBoss(20);
+                    score.add(200);
+                }
+
+                if (val == BLOCK_SKELETON) {
+                    score.add(50);
+
+                    currentGameMatrix[yy][xx] = BLOCK_EMPTY;
+                }
+            }
+    }
+
     private void dropLavaColumn(){
         int x = playerState.getX();
 
