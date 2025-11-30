@@ -17,6 +17,8 @@ public final class ViewData {
         this.yPosition = yPosition;
         this.nextBrickData = nextBrickData;
         this.ghostYPosition = ghostYPosition;
+        this.playerX = playerX;
+        this.playerY = playerY;
     }
 
     public int[][] getBrickData() {
