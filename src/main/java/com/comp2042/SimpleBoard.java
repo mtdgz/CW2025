@@ -69,7 +69,10 @@ public class SimpleBoard implements Board {
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
-        this.playerState = new PlayerState(CharacterType.STEVE);
+
+        int startX = width / 2;
+        int startY = 0;
+        this.playerState = new PlayerState(GameConfig.getSelectedCharacter(), startX, startY);
     }
 
     @Override
