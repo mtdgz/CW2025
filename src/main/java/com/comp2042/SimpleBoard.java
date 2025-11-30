@@ -228,8 +228,27 @@ public class SimpleBoard implements Board {
         createNewBrick();
     }
 
-    private boolean handlePlayerDeath(){
-        if(playerState.hasTotem()){
+    @Override
+    public boolean movePlayer(int dx, int dy) {
+        int newX = playerState.getX() + dx;
+        int newY = playerState.getY() + dy;
+
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height){
+        return false;
+        }
+
+        int cell = currentGameMatrix[newY][newX];
+
+        if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE);{
+            boolean gameOver = handlePlayerDeath();
+        }
+        playerState.setX(newX);
+        playerState.setY(newY);
+        return true;
+    }
+
+    private boolean handlePlayerDeath() {
+        if (playerState.hasTotem()) {
             playerState.consumeTotem();
 
             for (int y = 0; y < Math.min(2, height); y++){
