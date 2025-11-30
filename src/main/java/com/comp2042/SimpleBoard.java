@@ -347,9 +347,8 @@ public class SimpleBoard implements Board {
             return;
         }
 
-        if(currentGameMatrix[y][x] == BLOCK_EMPTY ||
-                currentGameMatrix[y][x] == BLOCK_SKELETON ||
-                currentGameMatrix[y][x] == BLOCK_TNT);
+        currentGameMatrix[y][x] = BLOCK_TNT;
+        explodeAt(x,y);
     }
 
     private void dropLavaColumn(){
