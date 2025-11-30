@@ -128,6 +128,30 @@ public class GuiController implements Initializable {
                         moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
                         keyEvent.consume();
                     }
+                    if (keyEvent.getCode() == KeyCode.A) {
+                        eventListener.onPlayerMove(-1, 0);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.D) {
+                        eventListener.onPlayerMove(1, 0);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.W) {
+                        eventListener.onPlayerMove(0, -1);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.S) {
+                        eventListener.onPlayerMove(0, 1);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.Q) {
+                        eventListener.onAbilityOne();
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.E) {
+                        eventListener.onAbilityTwo();
+                        keyEvent.consume();
+                    }
                 }
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
