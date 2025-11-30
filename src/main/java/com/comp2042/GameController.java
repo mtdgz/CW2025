@@ -62,4 +62,30 @@ public class GameController implements InputEventListener {
         board.newGame();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
     }
+
+    @Override
+    public void onPlayerMove(int dx, int dy) {
+        if(board instanceof SimpleBoard sb) {
+            boolean moved = sb.movePlayer(dx, dy);
+            if (moved) {
+                viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            }
+        }
+    }
+
+    @Override
+    public void onAbilityOne() {
+        if (board instanceof SimpleBoard sb){
+            sb.useAbilityOne();
+            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        }
+    }
+
+    @Override
+    public void onAbilityTwo() {
+        if(board instanceof SimpleBoard sb){
+            sb.useAbilityTwo();
+            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        }
+    }
 }
