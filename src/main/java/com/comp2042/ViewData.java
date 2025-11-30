@@ -8,7 +8,10 @@ public final class ViewData {
     private final int[][] nextBrickData;
     private final int ghostYPosition;
 
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int ghostYPosition) {
+    private final int playerX;
+    private final int playerY;
+
+    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int ghostYPosition, int playerX, int playerY) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
