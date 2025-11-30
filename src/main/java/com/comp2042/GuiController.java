@@ -441,4 +441,16 @@ public class GuiController implements Initializable {
             }
         }
     }
+
+    private void updatePlayerSkin(){
+        if(playerRect == null){
+            return;
+        }
+        CharacterType type = GameConfig.getSelectedCharacter();
+        if(type == CharacterType.ALEX){
+            playerRect.setFill(alexPaint);
+        } else {
+            playerRect.setFill(stevePaint);
+        }
+    }
 }
