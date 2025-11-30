@@ -245,6 +245,18 @@ public class GuiController implements Initializable {
             case 7:
                 returnPaint = sandstonePaint;
                 break;
+            case 8:
+                returnPaint = skeletonPaint;
+                break;
+            case 9:
+                returnPaint = zombiePaint;
+                break;
+            case 10:
+                returnPaint = tntPaint;
+                break;
+            case 11:
+                returnPaint = skeletonPaint;
+                break;
             default:
                 returnPaint = Color.WHITE;
                 break;
