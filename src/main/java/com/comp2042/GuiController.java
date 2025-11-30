@@ -105,6 +105,25 @@ public class GuiController implements Initializable {
         sandstonePaint = new ImagePattern(
                 new Image(getClass().getResource("/textures/Sandstone.png").toExternalForm())
         );
+        stevePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/steve.jpg").toExternalForm())
+        );
+        alexPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/alex.jpg").toExternalForm())
+        );
+        lavaPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/lava.jpg").toExternalForm())
+        );
+        tntPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/tnt.jpg").toExternalForm())
+        );
+        zombiePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/zombie.jpg").toExternalForm())
+        );
+        skeletonPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/skeleton.jpg").toExternalForm())
+        );
+
 
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
