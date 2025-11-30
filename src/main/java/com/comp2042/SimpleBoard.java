@@ -247,6 +247,10 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
     private boolean handlePlayerDeath() {
         if (playerState.hasTotem()) {
             playerState.consumeTotem();
