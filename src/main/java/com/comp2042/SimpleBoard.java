@@ -233,8 +233,8 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean movePlayer(int dx, int dy) {
-        int newX = playerState.getX() + dx;
-        int newY = playerState.getY() + dy;
+        int newX = playerX + dx;
+        int newY = playerY + dy;
 
         if (newX < 0 || newX >= width || newY < 0 || newY >= height){
         return false;
