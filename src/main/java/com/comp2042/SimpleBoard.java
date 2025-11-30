@@ -243,8 +243,7 @@ public class SimpleBoard implements Board {
         }
 
         int cell = currentGameMatrix[newY][newX];
-
-        if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE);{
+        if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE) {
             boolean gameOver = handlePlayerDeath();
         }
         playerState.setX(newX);
