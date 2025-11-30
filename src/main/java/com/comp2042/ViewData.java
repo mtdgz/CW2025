@@ -35,4 +35,12 @@ public final class ViewData {
     public int getGhostYPosition(){
         return  ghostYPosition;
     }
+
+    public int getPlayerX(){
+        return playerX;
+    }
+
+    public int getPlayerY(){
+        return playerY;
+    }
 }
