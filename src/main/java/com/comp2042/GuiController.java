@@ -489,4 +489,41 @@ public class GuiController implements Initializable {
             playerRect.setFill(stevePaint);
         }
     }
+
+    public void updateCooldowns(PlayerState playerState) {
+        if (playerState == null) return;
+
+        long now = System.currentTimeMillis();
+
+        String a1Name;
+        String a2Name;
+
+        long a1End;
+        long a2End;
+
+        if (playerState.getCharacterType() == CharacterType.STEVE) {
+            a1Name = "Q: Place Block";
+            a2Name = "E: TNT";
+            a1End = playerState.getPlaceBlockCooldownEnd();
+            a2End = playerState.getTntCooldownEnd();
+        } else {
+            a1Name = "Q: Destroy Block";
+            a2Name = "E: Lava";
+            a1End = playerState.getDestroyBlockCooldownEnd();
+            a2End = playerState.getLavaCooldownEnd();
+        }
+
+        abilityOneLabel.setText(a1Name + "  " + formatCooldown(now, a1End));
+        abilityTwoLabel.setText(a2Name + "  " + formatCooldown(now, a2End));
+    }
+
+    private String formatCooldown(long now, long endTime) {
+        if (now >= endTime) {
+            return "(Ready)";
+        }
+        long millisLeft = endTime - now;
+        double secondsLeft = millisLeft / 1000.0;
+        return String.format("(%.1fs)", secondsLeft);
+    }
+
 }
