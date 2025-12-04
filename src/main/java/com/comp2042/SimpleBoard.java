@@ -437,5 +437,20 @@ public class SimpleBoard implements Board {
             }
             currentGameMatrix[y][x] = BLOCK_LAVA;
         }
+        
+    private void resolveLava() {
+        if (!hasActiveLava) {
+            return;
+        }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (currentGameMatrix[y][x] == BLOCK_LAVA) {
+                    currentGameMatrix[y][x] = BLOCK_EMPTY;
+                }
+            }
+        }
+        hasActiveLava = false;
     }
+
 }
