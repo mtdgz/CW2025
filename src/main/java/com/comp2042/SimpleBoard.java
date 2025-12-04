@@ -107,7 +107,6 @@ public class SimpleBoard implements Board {
             return false;
         } else {
             currentOffset = p;
-
             bossTick();
             tickTnt();
             resolveLava();
@@ -502,7 +501,6 @@ public class SimpleBoard implements Board {
                 int v = currentGameMatrix[y][x];
 
                 if (v == BLOCK_ZOMBIE) {
-                    // boss takes damage but is NOT removed
                     playerState.damageBoss(15);
                     continue;
                 }
@@ -511,12 +509,10 @@ public class SimpleBoard implements Board {
                     continue;
                 }
 
-                // Everything else gets wiped
                 currentGameMatrix[y][x] = BLOCK_EMPTY;
             }
         }
 
-        // Ensure the TNT tile itself is cleared
         if (cx >= 0 && cx < width && cy >= 0 && cy < height &&
                 currentGameMatrix[cy][cx] == BLOCK_TNT) {
             currentGameMatrix[cy][cx] = BLOCK_EMPTY;
