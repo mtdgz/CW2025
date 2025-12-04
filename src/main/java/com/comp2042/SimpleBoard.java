@@ -471,4 +471,54 @@ public class SimpleBoard implements Board {
         hasActiveLava = false;
     }
 
+    private void tickTnt() {
+        if (activeTnt.isEmpty()) {
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        java.util.Iterator<TntEntry> it = activeTnt.iterator();
+
+        while (it.hasNext()) {
+            TntEntry t = it.next();
+            if (now >= t.explodeAt) {
+                explodeTnt(t.x, t.y);
+                it.remove();
+            }
+        }
+    }
+    private void explodeTnt(int cx, int cy) {
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int x = cx + dx;
+                int y = cy + dy;
+
+                if (x < 0 || x >= width || y < 0 || y >= height) {
+                    continue;
+                }
+
+                int v = currentGameMatrix[y][x];
+
+                if (v == BLOCK_ZOMBIE) {
+                    // boss takes damage but is NOT removed
+                    playerState.damageBoss(15);
+                    continue;
+                }
+
+                if (v == BLOCK_EMPTY) {
+                    continue;
+                }
+
+                // Everything else gets wiped
+                currentGameMatrix[y][x] = BLOCK_EMPTY;
+            }
+        }
+
+        // Ensure the TNT tile itself is cleared
+        if (cx >= 0 && cx < width && cy >= 0 && cy < height &&
+                currentGameMatrix[cy][cx] == BLOCK_TNT) {
+            currentGameMatrix[cy][cx] = BLOCK_EMPTY;
+        }
+    }
+
 }
