@@ -1,10 +1,8 @@
 package com.comp2042.logic.bricks;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Collections;
 
 public class RandomBrickGenerator implements BrickGenerator {
 
@@ -21,20 +19,37 @@ public class RandomBrickGenerator implements BrickGenerator {
         brickList.add(new SBrick());
         brickList.add(new TBrick());
         brickList.add(new ZBrick());
-        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
-        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+
+        refillBag();
+    }
+
+    private void refillBag(){
+        List<Brick> bag = new ArrayList<>(brickList);
+        Collections.shuffle(bag);
+
+        nextBricks.clear();
+        nextBricks.addAll(bag);
     }
 
     @Override
     public Brick getBrick() {
-        if (nextBricks.size() <= 1) {
-            nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        if(nextBricks.isEmpty()) {
+            refillBag();
         }
-        return nextBricks.poll();
+
+        Brick current = nextBricks.poll();
+
+        if (nextBricks.isEmpty()) {
+            refillBag();
+        }
+        return current;
     }
 
     @Override
     public Brick getNextBrick() {
+        if (nextBricks.isEmpty()){
+            refillBag();
+        }
         return nextBricks.peek();
     }
 }

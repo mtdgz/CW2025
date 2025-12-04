@@ -10,15 +10,22 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import java.util.List;
+import java.util.ArrayList;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,9 +33,11 @@ import java.util.ResourceBundle;
 public class GuiController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
+    @FXML
+    public BorderPane gameBoard;
 
     @FXML
-    private javafx.scene.control.Label scoreLabel;
+    private Label scoreLabel;
 
     @FXML
     private GridPane gamePanel;
@@ -42,11 +51,31 @@ public class GuiController implements Initializable {
     @FXML
     private GameOverPanel gameOverPanel;
 
+    @FXML
+    private GridPane nextBrickPanel;
+
+    private final List<Rectangle> ghostRects = new ArrayList<>();
+
+    private Paint cobblestonePaint;
+    private Paint copperPaint;
+    private Paint diamondPaint;
+    private Paint logPaint;
+    private Paint glowstonePaint;
+    private Paint obsidianPaint;
+    private Paint sandstonePaint;
+    private Paint stevePaint;
+    private Paint alexPaint;
+    private Paint lavaPaint;
+    private Paint tntPaint;
+    private Paint zombiePaint;
+    private Paint skeletonPaint;
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
 
     private Rectangle[][] rectangles;
+
+    private Rectangle playerRect;
 
     private Timeline timeLine;
 
@@ -54,29 +83,102 @@ public class GuiController implements Initializable {
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    private static final double GHOST_OPACITY = 0.3;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
+        URL fontUrl = getClass().getResource("/digital.ttf");
+        if (fontUrl != null) {
+            Font.loadFont((fontUrl.toExternalForm()),38);
+        } else{
+            System.out.println("digital.ttf not found");
+        }
+
+        cobblestonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Cobblestone.png").toExternalForm())
+        );
+        copperPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Copper.png").toExternalForm())
+        );
+        diamondPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Diamond.png").toExternalForm())
+        );
+        logPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Log.png").toExternalForm())
+        );
+        glowstonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Glowstone.png").toExternalForm())
+        );
+        obsidianPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Obsidian.png").toExternalForm())
+        );
+        sandstonePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/Sandstone.png").toExternalForm())
+        );
+        stevePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/steve.jpg").toExternalForm())
+        );
+        alexPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/alex.jpg").toExternalForm())
+        );
+        lavaPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/lava.jpg").toExternalForm())
+        );
+        tntPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/tnt.jpg").toExternalForm())
+        );
+        zombiePaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/zombie.jpg").toExternalForm())
+        );
+        skeletonPaint = new ImagePattern(
+                new Image(getClass().getResource("/textures/skeleton.jpg").toExternalForm())
+        );
+
+
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
-                    if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
+                    if (keyEvent.getCode() == KeyCode.LEFT) {
                         refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
                         keyEvent.consume();
                     }
-                    if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
+                    if (keyEvent.getCode() == KeyCode.RIGHT) {
                         refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
                         keyEvent.consume();
                     }
-                    if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
+                    if (keyEvent.getCode() == KeyCode.UP ) {
                         refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
                         keyEvent.consume();
                     }
-                    if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
+                    if (keyEvent.getCode() == KeyCode.DOWN) {
                         moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.A) {
+                        eventListener.onPlayerMove(-1, 0);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.D) {
+                        eventListener.onPlayerMove(1, 0);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.W) {
+                        eventListener.onPlayerMove(0, -1);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.S) {
+                        eventListener.onPlayerMove(0, 1);
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.Q) {
+                        eventListener.onAbilityOne();
+                        keyEvent.consume();
+                    }
+                    if (keyEvent.getCode() == KeyCode.E) {
+                        eventListener.onAbilityTwo();
                         keyEvent.consume();
                     }
                 }
@@ -103,7 +205,6 @@ public class GuiController implements Initializable {
                 gamePanel.add(rectangle, j, i - 2);
             }
         }
-
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
@@ -116,6 +217,21 @@ public class GuiController implements Initializable {
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
 
+        playerRect = new Rectangle(BRICK_SIZE,BRICK_SIZE);
+        playerRect.setArcWidth(0);
+        playerRect.setArcHeight(0);
+        updatePlayerSkin();
+        int pX = brick.getPlayerX();
+        int pY = brick.getPlayerY();
+        int visibleRow = pY - 2;
+        if (visibleRow >= 0) {
+            GridPane.setColumnIndex(playerRect, pX);
+            GridPane.setRowIndex(playerRect, visibleRow);
+            gamePanel.getChildren().add(playerRect);
+        } else {
+            playerRect.setVisible(false);
+            gamePanel.getChildren().add(playerRect);
+        }
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
@@ -123,6 +239,8 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+
+        refreshNextBrick(brick);
     }
 
     private Paint getFillColor(int i) {
@@ -132,25 +250,37 @@ public class GuiController implements Initializable {
                 returnPaint = Color.TRANSPARENT;
                 break;
             case 1:
-                returnPaint = Color.AQUA;
+                returnPaint = cobblestonePaint;
                 break;
             case 2:
-                returnPaint = Color.BLUEVIOLET;
+                returnPaint = copperPaint;
                 break;
             case 3:
-                returnPaint = Color.DARKGREEN;
+                returnPaint = diamondPaint;
                 break;
             case 4:
-                returnPaint = Color.YELLOW;
+                returnPaint = logPaint;
                 break;
             case 5:
-                returnPaint = Color.RED;
+                returnPaint = glowstonePaint;
                 break;
             case 6:
-                returnPaint = Color.BEIGE;
+                returnPaint = obsidianPaint;
                 break;
             case 7:
-                returnPaint = Color.BURLYWOOD;
+                returnPaint = sandstonePaint;
+                break;
+            case 8:
+                returnPaint = skeletonPaint;
+                break;
+            case 9:
+                returnPaint = zombiePaint;
+                break;
+            case 10:
+                returnPaint = tntPaint;
+                break;
+            case 11:
+                returnPaint = lavaPaint;
                 break;
             default:
                 returnPaint = Color.WHITE;
@@ -160,8 +290,20 @@ public class GuiController implements Initializable {
     }
 
 
-    private void refreshBrick(ViewData brick) {
+    void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
+
+            drawGhost(brick);
+
+            brickPanel.setLayoutX(
+                    gamePanel.getLayoutX()
+                    + brick.getxPosition()*BRICK_SIZE
+            );
+
+            brickPanel.setLayoutY(
+                    gamePanel.getLayoutY()
+                    +brick.getyPosition()*BRICK_SIZE
+            );
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
             brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
             for (int i = 0; i < brick.getBrickData().length; i++) {
@@ -169,7 +311,27 @@ public class GuiController implements Initializable {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
                 }
             }
+            updatePlayerPosition(brick);
         }
+    }
+
+    private void updatePlayerPosition(ViewData brick) {
+        if (playerRect == null){
+            return;
+        }
+
+        int pX = brick.getPlayerX();
+        int pY = brick.getPlayerY();
+
+        int visibleRow = pY - 2;
+        if (visibleRow < 0){
+            playerRect.setVisible(false);
+            return;
+        }
+
+        playerRect.setVisible(true);
+        GridPane.setColumnIndex(playerRect, pX);
+        GridPane.setRowIndex(playerRect, visibleRow);
     }
 
     public void refreshGameBackground(int[][] board) {
@@ -182,8 +344,8 @@ public class GuiController implements Initializable {
 
     private void setRectangleData(int color, Rectangle rectangle) {
         rectangle.setFill(getFillColor(color));
-        rectangle.setArcHeight(9);
-        rectangle.setArcWidth(9);
+        rectangle.setArcHeight(0);
+        rectangle.setArcWidth(0);
     }
 
     private void moveDown(MoveEvent event) {
@@ -194,7 +356,10 @@ public class GuiController implements Initializable {
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             }
-            refreshBrick(downData.getViewData());
+
+            ViewData viewData = downData.getViewData();
+            refreshBrick(viewData);
+            refreshNextBrick(viewData);
         }
         gamePanel.requestFocus();
     }
@@ -224,6 +389,94 @@ public class GuiController implements Initializable {
     }
 
     public void pauseGame(ActionEvent actionEvent) {
+
+        if (isGameOver.get()) {
+            return;
+        }
+        if (isPause.get()) {
+            isPause.set(false);
+            if (timeLine != null) {
+                timeLine.play();
+            }
+        } else {
+            isPause.set(true);
+            if (timeLine != null) {
+                timeLine.stop();
+            }
+        }
         gamePanel.requestFocus();
+    }
+
+    public void refreshNextBrick(ViewData viewData) {
+        int[][] next = viewData.getNextBrickData();
+
+        nextBrickPanel.getChildren().clear();
+
+        int rows = next.length;
+        int cols = next[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j <cols; j++){
+                int value = next[i][j];
+                if (value != 0){
+                    Rectangle r = new Rectangle(BRICK_SIZE,BRICK_SIZE);
+                    setRectangleData(value, r);
+                    nextBrickPanel.add(r,j,i);
+                }
+            }
+        }
+    }
+
+    private void drawGhost(ViewData brick){
+        for(Rectangle r : ghostRects){
+            gamePanel.getChildren().remove(r);
+        }
+        ghostRects.clear();
+
+        int ghostY = brick.getGhostYPosition();
+        if (ghostY < 0){
+            return;
+        }
+
+        int[][] data = brick.getBrickData();
+        int x = brick.getxPosition();
+
+        for (int row = 0; row < data.length; row++){
+            for(int col = 0; col < data[row].length; col++){
+                int value = data[row][col];
+                if (value==0) continue;
+
+                int boardRow = ghostY + row;
+                int boardCol = x + col;
+
+                if(boardRow<2){
+                    continue;
+                }
+
+                Rectangle r = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                setRectangleData(value, r);
+                r.setOpacity(GHOST_OPACITY);
+
+                int visibleRow = boardRow - 2;
+
+                GridPane.setColumnIndex(r,boardCol);
+                GridPane.setRowIndex(r,visibleRow);
+
+                gamePanel.getChildren().add(r);
+                ghostRects.add(r);
+            }
+        }
+    }
+
+    private void updatePlayerSkin(){
+        if(playerRect == null){
+            return;
+        }
+        CharacterType type = GameConfig.getSelectedCharacter();
+        if(type == CharacterType.ALEX){
+            playerRect.setFill(alexPaint);
+        } else {
+            playerRect.setFill(stevePaint);
+        }
     }
 }

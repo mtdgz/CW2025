@@ -23,4 +23,9 @@ public interface Board {
     Score getScore();
 
     void newGame();
+
+    boolean movePlayer(int dx, int dy);
+
+    void useAbilityOne();
+    void useAbilityTwo();
 }

@@ -5,6 +5,8 @@ import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
 
 import java.awt.*;
+import java.awt.Point;
+import java.util.Random;
 
 public class SimpleBoard implements Board {
 
@@ -15,6 +17,53 @@ public class SimpleBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private final PlayerState playerState;
+
+    private static final int BLOCK_EMPTY = 0;
+    private static final int BLOCK_SKELETON = 8;
+    private static final int BLOCK_ZOMBIE = 9;
+    private static final int BLOCK_TNT = 10;
+    private static final int BLOCK_LAVA = 11;
+
+    private final Random rng = new Random();
+
+    private int playerX;
+    private int playerY;
+
+    private boolean canPlace(int[][] shape, int x, int y) {
+        for (int row = 0; row < shape.length; row++) {
+            if (shape[row] == null) continue;
+            for (int col = 0; col < shape[row].length; col++) {
+                if (shape[row][col] == 0) continue;
+                int boardX = x + col;
+                int boardY = y + row;
+
+                if (boardY < 0) {
+                    continue;
+                }
+
+                if (boardX < 0 || boardX >= width || boardY >= height) {
+                    return false;
+                }
+
+                if (currentGameMatrix[boardY][boardX] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private int computeGhostY() {
+        int[][] shape = brickRotator.getCurrentShape();
+        int x = currentOffset.x;
+        int ghostY = currentOffset.y;
+
+        while (canPlace(shape, x, ghostY + 1)) {
+            ghostY++;
+        }
+        return ghostY;
+    }
 
     public SimpleBoard(int height, int width) {
         this.width = width;
@@ -23,6 +72,14 @@ public class SimpleBoard implements Board {
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
+
+        int startX = width / 2;
+        int startY = 2;
+
+        this.playerX = startX;
+        this.playerY = startY;
+
+        this.playerState = new PlayerState(GameConfig.getSelectedCharacter(), startX, startY);
     }
 
     @Override
@@ -35,6 +92,9 @@ public class SimpleBoard implements Board {
             return false;
         } else {
             currentOffset = p;
+
+            bossTick();
+
             return true;
         }
     }
@@ -95,7 +155,14 @@ public class SimpleBoard implements Board {
         int spawnY = 1;
 
         currentOffset = new Point(spawnX, spawnY);
-        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+
+        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+
+        if (!conflict) {
+            return false;
+        }
+
+        return handlePlayerDeath();
     }
 
     @Override
@@ -111,19 +178,23 @@ public class SimpleBoard implements Board {
         int[][] nextShape;
 
         if (nextBrick != null
-        && nextBrick.getShapeMatrix() != null
-        && !nextBrick.getShapeMatrix().isEmpty()){
+                && nextBrick.getShapeMatrix() != null
+                && !nextBrick.getShapeMatrix().isEmpty()) {
             nextShape = nextBrick.getShapeMatrix().get(0);
         } else {
             nextShape = new int[4][4];
         }
 
+        int ghostY = computeGhostY();
 
         return new ViewData(
                 currentShape,
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),
-                nextShape
+                nextShape,
+                ghostY,
+                playerX,
+                playerY
         );
     }
 
@@ -136,8 +207,20 @@ public class SimpleBoard implements Board {
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
-        return clearRow;
 
+        int linesRemoved = clearRow.getLinesRemoved();
+        if (linesRemoved > 0) {
+            playerState.addLinesCleared(linesRemoved);
+            if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 20) {
+                spawnZombieBoss(); //spawn once for now, change later
+                playerState.setBossSpawned(true);
+            }
+
+            if (playerState.isBossSpawned() && !playerState.isBossDead()) {
+                playerState.damageBoss(linesRemoved * 10);
+            }
+        }
+        return clearRow;
     }
 
     @Override
@@ -148,8 +231,181 @@ public class SimpleBoard implements Board {
 
     @Override
     public void newGame() {
-        currentGameMatrix = new int[width][height];
+        currentGameMatrix = new int[height][width];
         score.reset();
+
+        int startX = width/2;
+        int startY = 2;
+        playerY = startY;
+        playerX = startX;
+
+        playerState.setX(startX);
+        playerState.setY(startY);
         createNewBrick();
+    }
+
+    @Override
+    public boolean movePlayer(int dx, int dy) {
+        int newX = playerX + dx;
+        int newY = playerY + dy;
+
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height){
+        return false;
+        }
+
+        int cell = currentGameMatrix[newY][newX];
+        if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE) {
+            boolean gameOver = handlePlayerDeath();
+        }
+        playerX = newX;
+        playerY = newY;
+
+        playerState.setX(newX);
+        playerState.setY(newY);
+        return true;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    private boolean handlePlayerDeath() {
+        if (playerState.hasTotem()) {
+            playerState.consumeTotem();
+
+            for (int y = 0; y < Math.min(2, height); y++) {
+                for (int x = 0; x < width; x++) {
+                    currentGameMatrix[y][x] = BLOCK_EMPTY;
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void spawnZombieBoss() {
+        int centerX = width / 2;
+        int y = 2;
+
+        for (int dy = 0; dy < 2; dy++) {
+            for (int dx = 0; dx < 2; dx++) {
+                int bx = centerX + dx;
+                int by = y + dy;
+                if (bx >= 0 && bx < width && by < height) {
+                    currentGameMatrix[by][bx] = BLOCK_ZOMBIE;
+                }
+            }
+        }
+    }
+    private void bossTick(){
+        if(!playerState.isBossSpawned() || playerState.isBossDead()){
+            return;
+        }
+        java.util.List<Point> candidates = new java.util.ArrayList<>();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int v = currentGameMatrix[y][x];
+                if (v != BLOCK_EMPTY && v != BLOCK_ZOMBIE && v != BLOCK_SKELETON) {
+                    candidates.add(new Point(x, y));
+                }
+            }
+        }
+        if (candidates.isEmpty()) {
+            return;
+        }
+
+        Point p = candidates.get(rng.nextInt(candidates.size()));
+        currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
+    }
+
+    public void useAbilityOne() {
+        long now = System.currentTimeMillis();
+        if (playerState.getCharacterType() == CharacterType.STEVE) {
+            if (now < playerState.getPlaceBlockCooldownEnd()) {
+                return;
+            }
+            AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
+            playerState.setPlaceBlockCooldownEnd(now + 5000L);
+        } else {
+            if (now < playerState.getDestroyBlockCooldownEnd()) {
+                return;
+            }
+            AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
+            playerState.setDestroyBlockCooldownEnd(now + 5000L);
+        }
+    }
+
+    public void useAbilityTwo() {
+        long now = System.currentTimeMillis();
+        if (playerState.getCharacterType() == CharacterType.STEVE) {
+            if (now < playerState.getTntCooldownEnd()) {
+                return;
+            }
+            marktTntUnder();
+            playerState.setTntCooldownEnd(now + 10000L);
+        } else {
+            if (now < playerState.getLavaCooldownEnd()) {
+                return;
+            }
+            dropLavaColumn();
+            playerState.setLavaCooldownEnd(now + 50000L);
+        }
+    }
+    private void marktTntUnder(){
+        int x = playerState.getX();
+        int y = playerState.getY() + 1;
+
+        if (x<0 || x >= width || y <0 || y >= height){
+            return;
+        }
+
+        currentGameMatrix[y][x] = BLOCK_TNT;
+        explodeAt(x,y);
+    }
+
+    private void explodeAt(int cx, int cy) {
+        for (int dy = -1; dy <= 1; dy++) {
+            int yy = cy + dy;
+            if (yy < 0 || yy >= height) continue;
+
+            for (int dx = -1; dx <= 1; dx++) {
+                int xx = cx + dx;
+                if (xx < 0 || xx >= width) continue;
+
+                int val = currentGameMatrix[yy][xx];
+
+                if (val == BLOCK_ZOMBIE) {
+                    playerState.damageBoss(20);
+                    score.add(200);
+                }
+
+                if (val == BLOCK_SKELETON) {
+                    score.add(50);
+
+                    currentGameMatrix[yy][xx] = BLOCK_EMPTY;
+                }
+            }
+        }
+    }
+
+
+    private void dropLavaColumn(){
+        int x = playerState.getX();
+
+        if(x<0 || x>= width){
+            return;
+        }
+        for (int y = playerState.getY() + 1; y < height; y++){
+            int v = currentGameMatrix[y][x];
+
+            if (v == BLOCK_ZOMBIE){
+                playerState.damageBoss(10);
+            }
+            if(v != BLOCK_EMPTY && v != BLOCK_SKELETON && v != BLOCK_ZOMBIE){
+                break;
+            }
+            currentGameMatrix[y][x] = BLOCK_LAVA;
+        }
     }
 }

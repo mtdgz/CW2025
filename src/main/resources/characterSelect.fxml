@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label.*?>
+
+<?import java.net.URL?>
+
+
+<?import javafx.scene.control.Label?>
+<BorderPane fx:controller="com.comp2042.CharacterSelectController"
+            xmlns:fx="https://javafx.com/fxml"
+            styleClass="menu-root">
+
+    <top>
+        <VBox alignment="CENTER" spacing="4">
+            <Label text="CHOOSE YOUR CHARACTER" styleClass="Minecraft Ten"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="12">
+            <Button text="Steve"
+                    onAction="#onChooseSteve"
+                    styleClass="menu-button"/>
+            <Button text="Alex"
+                    onAction="#onChooseAlex"
+                    styleClass="menu-button"/>
+            <Button text="Back"
+                    onAction="#onBackToHome"
+                    styleClass="menu-button"/>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+</BorderPane>

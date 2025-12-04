@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import javafx.scene.text.Font;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -14,17 +14,30 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
-        ResourceBundle resources = null;
-        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
-        Parent root = fxmlLoader.load();
-        GuiController c = fxmlLoader.getController();
+        URL fontUrl = getClass().getResource("/fonts/Minecraft.ttf");
+        if (fontUrl != null){
+            Font.loadFont(fontUrl.toExternalForm(), 16);
+        } else {
+            System.out.println("Minecraft font not found");
+        }
 
-        primaryStage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 300, 510);
+        URL fxmlUrl = getClass().getResource("/homeLayout.fxml");
+        if (fxmlUrl == null){
+            System.out.println("homeLayout.fxml not found");
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/homeLayout.fxml"));
+        Parent root = loader.load();
+
+        HomeController homeController = loader.getController();
+        homeController.setStage(primaryStage);
+
+        Scene scene = new Scene(root, 460, 510);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Tetris Minecraft Edition");
+        primaryStage.setResizable(false);
         primaryStage.show();
-        new GameController(c);
     }
 
 

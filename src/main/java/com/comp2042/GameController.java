@@ -3,11 +3,11 @@ package com.comp2042;
 public class GameController implements InputEventListener {
 
     private Board board = new SimpleBoard(25, 10);
-
     private final GuiController viewGuiController;
 
     public GameController(GuiController c) {
-        viewGuiController = c;
+        this.viewGuiController = c;
+        this.board = new SimpleBoard(25,10);
         board.createNewBrick();
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
@@ -61,5 +61,30 @@ public class GameController implements InputEventListener {
     public void createNewGame() {
         board.newGame();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGuiController.refreshBrick(board.getViewData());
+    }
+
+    @Override
+    public void onPlayerMove(int dx, int dy) {
+        boolean moved = board.movePlayer(dx, dy);
+        if (moved) {
+            ViewData viewData = board.getViewData();
+            viewGuiController.refreshBrick(viewData);
+        }
+    }
+
+    // -------- ABILITIES (Q / E) --------
+    @Override
+    public void onAbilityOne() {
+        board.useAbilityOne();
+        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGuiController.refreshBrick(board.getViewData());
+    }
+
+    @Override
+    public void onAbilityTwo() {
+        board.useAbilityTwo();
+        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGuiController.refreshBrick(board.getViewData());
     }
 }

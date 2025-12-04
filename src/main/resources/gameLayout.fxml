@@ -6,14 +6,44 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Separator?>
+
 <Pane fx:controller="com.comp2042.GuiController"
       xmlns:fx="http://javafx.com/fxml">
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-        <center>
-            <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-        </center>
-    </BorderPane>
+
+    <HBox spacing="20">
+        <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+            <center>
+                <GridPane fx:id="gamePanel" id="gamePanel" hgap="1" vgap="1"/>
+            </center>
+        </BorderPane>
+
+        <VBox spacing="15">
+            <VBox spacing="5" styleClass="score-panel">
+                <Label text="Score" styleClass="score-title"/>
+                <Label fx:id="scoreLabel" text="0" styleClass="score-value"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Next Brick" styleClass="next-title"/>
+                <GridPane fx:id="nextBrickPanel"
+                          hgap="1"
+                          vgap="1"
+                          styleClass="next-panel"/>
+            </VBox>
+
+            <HBox spacing="10" styleClass="control-panel">
+                <Button text="New Game"
+                        onAction="#newGame"
+                        styleClass="control-button"/>
+                <Button text="Pause"
+                        onAction="#pauseGame"
+                        styleClass="control-button"/>
+            </HBox>
+        </VBox>
+    </HBox>
+    <GridPane fx:id="brickPanel"
+              vgap="1" hgap="1"/>
 
     <Group fx:id="groupNotification" layoutX="14" layoutY="203">
         <VBox alignment="CENTER">
@@ -24,5 +54,4 @@
         <URL value="@window_style.css"/>
     </stylesheets>
 
-    <Label fx:id="scoreLabel" text="0" />
 </Pane>
