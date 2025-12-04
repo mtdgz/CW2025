@@ -32,6 +32,11 @@
                           styleClass="next-panel"/>
             </VBox>
 
+            <VBox spacing="4">
+                <Label fx:id="abilityOneLabel" text="Q: Ready" styleClass="score-title"/>
+                <Label fx:id="abilityTwoLabel" text="E: Ready" styleClass="score-title"/>
+            </VBox>
+
             <HBox spacing="10" styleClass="control-panel">
                 <Button text="New Game"
                         onAction="#newGame"
