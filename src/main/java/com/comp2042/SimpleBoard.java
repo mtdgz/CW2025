@@ -109,6 +109,8 @@ public class SimpleBoard implements Board {
             currentOffset = p;
 
             bossTick();
+            tickTnt();
+            resolveLava();
 
             return true;
         }
