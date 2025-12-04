@@ -380,17 +380,31 @@ public class SimpleBoard implements Board {
             playerState.setLavaCooldownEnd(now + 50000L);
         }
     }
-    private void marktTntUnder(){
+
+    private void marktTntUnder() {
         int x = playerState.getX();
         int y = playerState.getY() + 1;
 
-        if (x<0 || x >= width || y <0 || y >= height){
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return;
+        }
+
+        int v = currentGameMatrix[y][x];
+
+        if (v == BLOCK_ZOMBIE) {
+            return;
+        }
+
+        if (v == BLOCK_TNT) {
             return;
         }
 
         currentGameMatrix[y][x] = BLOCK_TNT;
-        explodeAt(x,y);
+        long now = System.currentTimeMillis();
+        activeTnt.add(new TntEntry(x, y, now + 4000L));   // 4 seconds later
     }
+
+
 
     private void explodeAt(int cx, int cy) {
         for (int dy = -1; dy <= 1; dy++) {
