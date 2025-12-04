@@ -300,8 +300,23 @@ public class SimpleBoard implements Board {
     }
 
     private void spawnZombieBoss() {
-        int centerX = width / 2;
-        int y = 2;
+        int baseY = height - 2;
+        int spawnX = -1;
+
+        for (int x = 0; x < width - 1; x++) {
+            if (currentGameMatrix[baseY][x] == BLOCK_EMPTY &&
+                    currentGameMatrix[baseY][x + 1] == BLOCK_EMPTY &&
+                    currentGameMatrix[baseY + 1][x] == BLOCK_EMPTY &&
+                    currentGameMatrix[baseY + 1][x + 1] == BLOCK_EMPTY) {
+
+                spawnX = x;
+                break;
+            }
+        }
+
+        if (spawnX == -1) {
+            return;
+        }
 
         for (int dy = 0; dy < 2; dy++) {
             for (int dx = 0; dx < 2; dx++) {
