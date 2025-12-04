@@ -233,6 +233,16 @@ public class GuiController implements Initializable {
             gamePanel.getChildren().add(playerRect);
         }
 
+        long intervalMs;
+        Difficulty diff = GameConfig.getSelectedDifficulty();
+        if (diff == Difficulty.PEACEFUL) {
+            intervalMs = 700;   // peaceful
+        } else if (diff == Difficulty.HARDCORE) {
+            intervalMs = 250;   // hardcore
+        } else {
+            intervalMs = 400;   // normal
+        }
+
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
