@@ -39,6 +39,9 @@
                 <Button text="Pause"
                         onAction="#pauseGame"
                         styleClass="control-button"/>
+                <Button text="Home"
+                        onAction="#onReturnHome"
+                        styleClass="control-button"/>
             </HBox>
         </VBox>
     </HBox>
