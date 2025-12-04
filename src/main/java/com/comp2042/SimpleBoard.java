@@ -320,11 +320,9 @@ public class SimpleBoard implements Board {
 
         for (int dy = 0; dy < 2; dy++) {
             for (int dx = 0; dx < 2; dx++) {
-                int bx = centerX + dx;
-                int by = y + dy;
-                if (bx >= 0 && bx < width && by < height) {
-                    currentGameMatrix[by][bx] = BLOCK_ZOMBIE;
-                }
+                int bx = spawnX + dx;
+                int by = baseY + dy;
+                currentGameMatrix[by][bx] = BLOCK_ZOMBIE;
             }
         }
     }
@@ -421,23 +419,29 @@ public class SimpleBoard implements Board {
 
 
     private void dropLavaColumn(){
-        int x = playerState.getX();
-
-        if(x<0 || x>= width){
-            return;
-        }
-        for (int y = playerState.getY() + 1; y < height; y++){
-            int v = currentGameMatrix[y][x];
-
-            if (v == BLOCK_ZOMBIE){
-                playerState.damageBoss(10);
+            int x = playerState.getX();
+            if (x < 0 || x >= width) {
+                return;
             }
-            if(v != BLOCK_EMPTY && v != BLOCK_SKELETON && v != BLOCK_ZOMBIE){
-                break;
+
+            for (int y = 0; y < height; y++) {
+                int v = currentGameMatrix[y][x];
+
+                if (v == BLOCK_EMPTY) {
+                    continue;
+                }
+
+                if (v == BLOCK_ZOMBIE) {
+                    playerState.damageBoss(10);
+                    continue;
+                }
+
+                currentGameMatrix[y][x] = BLOCK_LAVA;
             }
-            currentGameMatrix[y][x] = BLOCK_LAVA;
+
+            hasActiveLava = true;
         }
-        
+
     private void resolveLava() {
         if (!hasActiveLava) {
             return;
