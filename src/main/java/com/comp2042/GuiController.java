@@ -236,7 +236,7 @@ public class GuiController implements Initializable {
         long intervalMs;
         Difficulty diff = GameConfig.getSelectedDifficulty();
         if (diff == Difficulty.PEACEFUL) {
-            intervalMs = 700;   // peaceful
+            intervalMs = 550;   // peaceful
         } else if (diff == Difficulty.HARDCORE) {
             intervalMs = 250;   // hardcore
         } else {
