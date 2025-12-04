@@ -30,6 +30,21 @@ public class SimpleBoard implements Board {
     private int playerX;
     private int playerY;
 
+    private static class TntEntry{
+        final int x;
+        final int y;
+        final long explodeAt;
+
+        TntEntry(int x, int y, long explodeAt){
+            this.x = x;
+            this.y = y;
+            this.explodeAt = explodeAt;
+        }
+    }
+
+    private final java.util.List<TntEntry> activeTnt = new java.util.ArrayList<>();
+    private boolean hasActiveLava = false;
+
     private boolean canPlace(int[][] shape, int x, int y) {
         for (int row = 0; row < shape.length; row++) {
             if (shape[row] == null) continue;
