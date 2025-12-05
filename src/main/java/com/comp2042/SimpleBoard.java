@@ -227,7 +227,7 @@ public class SimpleBoard implements Board {
         int linesRemoved = clearRow.getLinesRemoved();
         if (linesRemoved > 0) {
             playerState.addLinesCleared(linesRemoved);
-            if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 20) {
+            if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
                 spawnZombieBoss(); //spawn once for now, change later
                 playerState.setBossSpawned(true);
             }
