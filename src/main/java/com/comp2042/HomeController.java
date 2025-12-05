@@ -31,7 +31,7 @@ public class HomeController {
         Parent root = loader.load();
 
         GuiController guiController = loader.getController();
-        new GameController(guiController); //gamecontroller?
+        new GameController(guiController);
 
         Stage stage = getStageFromEvent(event);
         Scene scene = new Scene(root, 460, 510);
@@ -41,8 +41,17 @@ public class HomeController {
     }
 
     @FXML
-    private void onChooseDifficulty(){
+    private void onChooseDifficulty() throws Exception {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/difficultyLayout.fxml"));
+        Parent root = loader.load();
 
+        Stage popup = new Stage();
+        popup.setTitle("Select Difficulty");
+        popup.setScene(new Scene(root, 460, 300)); // adjust size if you like
+        popup.setResizable(false);
+        popup.initOwner(stage);
+        popup.showAndWait();
     }
 
     @FXML
