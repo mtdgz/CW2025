@@ -203,3 +203,15 @@
     -fx-background-color: linear-gradient(#204020, #182f18);
     -fx-translate-y: 1;
 }
+
+.difficulty-peaceful{
+    -fx-text-fill: #55ff55;
+}
+
+.difficulty-normal {
+    -fx-text-fill: #ffff55;
+}
+
+.difficulty-hardcore {
+    -fx-text-fill: #ff5555;
+}
