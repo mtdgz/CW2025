@@ -531,5 +531,17 @@ public class GuiController implements Initializable {
         double secondsLeft = millisLeft / 1000.0;
         return String.format("(%.1fs)", secondsLeft);
     }
+    
+    public void onReturnHome(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 460, 510);
+            stage.setScene(scene);
+            stage.setTitle("Tetris Minecraft Edition");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
