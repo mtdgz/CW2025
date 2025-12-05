@@ -355,7 +355,7 @@ public class SimpleBoard implements Board {
                 return;
             }
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
-            playerState.setPlaceBlockCooldownEnd(now + 5000L);
+            playerState.setPlaceBlockCooldownEnd(now + 2500L);
         } else {
             if (now < playerState.getDestroyBlockCooldownEnd()) {
                 return;
@@ -372,13 +372,13 @@ public class SimpleBoard implements Board {
                 return;
             }
             marktTntUnder();
-            playerState.setTntCooldownEnd(now + 10000L);
+            playerState.setTntCooldownEnd(now + 2500L);
         } else {
             if (now < playerState.getLavaCooldownEnd()) {
                 return;
             }
             dropLavaColumn();
-            playerState.setLavaCooldownEnd(now + 50000L);
+            playerState.setLavaCooldownEnd(now + 5000L);
         }
     }
 
