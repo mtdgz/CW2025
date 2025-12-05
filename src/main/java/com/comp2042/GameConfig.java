@@ -21,6 +21,16 @@ public final class GameConfig {
     }
 
     public static void setSelectedDifficulty(Difficulty difficulty) {
-        selectedDifficulty = difficulty;
+        if(difficulty != null){
+            selectedDifficulty = difficulty;
+        }
+    }
+
+    public static int fallSpeed() {
+        return switch (selectedDifficulty) {
+            case PEACEFUL -> 650; // slow
+            case NORMAL   -> 400; // default
+            case HARDCORE -> 250; // fast
+        };
     }
 }
