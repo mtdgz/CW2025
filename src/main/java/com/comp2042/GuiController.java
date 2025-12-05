@@ -54,6 +54,12 @@ public class GuiController implements Initializable {
     @FXML
     private GridPane nextBrickPanel;
 
+    @FXML
+    private Label abilityOneLabel;
+
+    @FXML
+    private Label abilityTwoLabel;
+
     private final List<Rectangle> ghostRects = new ArrayList<>();
 
     private Paint cobblestonePaint;
