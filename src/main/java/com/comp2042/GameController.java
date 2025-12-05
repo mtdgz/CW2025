@@ -12,6 +12,7 @@ public class GameController implements InputEventListener {
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
         viewGuiController.bindScore(board.getScore().scoreProperty());
+        refreshCooldowns();
     }
 
     @Override
@@ -35,6 +36,7 @@ public class GameController implements InputEventListener {
                 board.getScore().add(1);
             }
         }
+        refreshCooldowns();
         return new DownData(clearRow, board.getViewData());
     }
 
@@ -71,14 +73,15 @@ public class GameController implements InputEventListener {
             ViewData viewData = board.getViewData();
             viewGuiController.refreshBrick(viewData);
         }
+        refreshCooldowns();
     }
 
-    // -------- ABILITIES (Q / E) --------
     @Override
     public void onAbilityOne() {
         board.useAbilityOne();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
         viewGuiController.refreshBrick(board.getViewData());
+        refreshCooldowns();
     }
 
     @Override
@@ -86,5 +89,13 @@ public class GameController implements InputEventListener {
         board.useAbilityTwo();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
         viewGuiController.refreshBrick(board.getViewData());
+        refreshCooldowns();
     }
+
+    private void refreshCooldowns() {
+        if (board instanceof SimpleBoard sb) {
+            viewGuiController.updateCooldowns(sb.getPlayerState());
+        }
+    }
+
 }
