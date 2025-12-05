@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import java.net.URL?>
+
+<BorderPane fx:controller="com.comp2042.DifficultyController"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="menu-root">
+
+    <top>
+        <VBox alignment="CENTER" spacing="4">
+            <Label text="SELECT DIFFICULTY" styleClass="menu-title-main"/>
+            <Label text="Choose your challenge" styleClass="menu-title-sub"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="12">
+            <Button fx:id="peacefulButton"
+                    text="Peaceful"
+                    onAction="#choosePeaceful"
+                    styleClass="menu-button peaceful-button" />
+
+            <Button fx:id="normalButton"
+                    text="Normal"
+                    onAction="#chooseNormal"
+                    styleClass="menu-button normal-button" />
+
+            <Button fx:id="hardcoreButton"
+                    text="Hardcore"
+                    onAction="#chooseHardcore"
+                    styleClass="menu-button hardcore-button" />
+
+            <Button fx:id="backButton"
+                    text="Back"
+                    styleClass="menu-button"
+                    onAction="#goBack"/>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+
+</BorderPane>
