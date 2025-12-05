@@ -204,14 +204,14 @@
     -fx-translate-y: 1;
 }
 
-.difficulty-peaceful{
+.peaceful-buton{
     -fx-text-fill: #55ff55;
 }
 
-.difficulty-normal {
+.normal-button {
     -fx-text-fill: #ffff55;
 }
 
-.difficulty-hardcore {
+.hardcore-button {
     -fx-text-fill: #ff5555;
 }
