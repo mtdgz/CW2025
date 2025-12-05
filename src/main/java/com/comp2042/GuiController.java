@@ -26,6 +26,11 @@ import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -239,10 +244,10 @@ public class GuiController implements Initializable {
             gamePanel.getChildren().add(playerRect);
         }
 
-        long intervalMs;
+        int intervalMs;
         Difficulty diff = GameConfig.getSelectedDifficulty();
         if (diff == Difficulty.PEACEFUL) {
-            intervalMs = 550;   // peaceful
+            intervalMs = 650;   // peaceful
         } else if (diff == Difficulty.HARDCORE) {
             intervalMs = 250;   // hardcore
         } else {
@@ -250,7 +255,7 @@ public class GuiController implements Initializable {
         }
 
         timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
+                Duration.millis(GameConfig.fallSpeed()),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
@@ -531,7 +536,6 @@ public class GuiController implements Initializable {
         double secondsLeft = millisLeft / 1000.0;
         return String.format("(%.1fs)", secondsLeft);
     }
-    
     public void onReturnHome(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
