@@ -44,10 +44,10 @@
                 <Button text="Pause"
                         onAction="#pauseGame"
                         styleClass="control-button"/>
+            </HBox>
                 <Button text="Home"
                         onAction="#onReturnHome"
                         styleClass="control-button"/>
-            </HBox>
         </VBox>
     </HBox>
     <GridPane fx:id="brickPanel"
