@@ -19,23 +19,24 @@ public class SimpleBoard implements Board {
     private final Score score;
     private final PlayerState playerState;
 
-    private static final int BLOCK_EMPTY = 0;
+    private static final int BLOCK_EMPTY    = 0;
     private static final int BLOCK_SKELETON = 8;
-    private static final int BLOCK_ZOMBIE = 9;
-    private static final int BLOCK_TNT = 10;
-    private static final int BLOCK_LAVA = 11;
+    private static final int BLOCK_ZOMBIE   = 9;
+    private static final int BLOCK_TNT      = 10;
+    private static final int BLOCK_LAVA     = 11;
 
     private final Random rng = new Random();
 
     private int playerX;
     private int playerY;
 
-    private static class TntEntry{
+    // NEW: track TNT entries
+    private static class TntEntry {
         final int x;
         final int y;
         final long explodeAt;
 
-        TntEntry(int x, int y, long explodeAt){
+        TntEntry(int x, int y, long explodeAt) {
             this.x = x;
             this.y = y;
             this.explodeAt = explodeAt;
@@ -44,6 +45,8 @@ public class SimpleBoard implements Board {
 
     private final java.util.List<TntEntry> activeTnt = new java.util.ArrayList<>();
     private boolean hasActiveLava = false;
+
+    private boolean playerDead = false;
 
     private boolean canPlace(int[][] shape, int x, int y) {
         for (int row = 0; row < shape.length; row++) {
@@ -102,7 +105,12 @@ public class SimpleBoard implements Board {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         Point p = new Point(currentOffset);
         p.translate(0, 1);
-        boolean conflict = MatrixOperations.intersect(currentMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
+        boolean conflict = MatrixOperations.intersect(
+                currentMatrix,
+                brickRotator.getCurrentShape(),
+                (int) p.getX(),
+                (int) p.getY()
+        );
         if (conflict) {
             return false;
         } else {
@@ -110,18 +118,21 @@ public class SimpleBoard implements Board {
             bossTick();
             tickTnt();
             resolveLava();
-
             return true;
         }
     }
-
 
     @Override
     public boolean moveBrickLeft() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         Point p = new Point(currentOffset);
         p.translate(-1, 0);
-        boolean conflict = MatrixOperations.intersect(currentMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
+        boolean conflict = MatrixOperations.intersect(
+                currentMatrix,
+                brickRotator.getCurrentShape(),
+                (int) p.getX(),
+                (int) p.getY()
+        );
         if (conflict) {
             return false;
         } else {
@@ -135,7 +146,12 @@ public class SimpleBoard implements Board {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         Point p = new Point(currentOffset);
         p.translate(1, 0);
-        boolean conflict = MatrixOperations.intersect(currentMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
+        boolean conflict = MatrixOperations.intersect(
+                currentMatrix,
+                brickRotator.getCurrentShape(),
+                (int) p.getX(),
+                (int) p.getY()
+        );
         if (conflict) {
             return false;
         } else {
@@ -148,7 +164,12 @@ public class SimpleBoard implements Board {
     public boolean rotateLeftBrick() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(currentMatrix, nextShape.getShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        boolean conflict = MatrixOperations.intersect(
+                currentMatrix,
+                nextShape.getShape(),
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY()
+        );
         if (conflict) {
             return false;
         } else {
@@ -172,12 +193,18 @@ public class SimpleBoard implements Board {
 
         currentOffset = new Point(spawnX, spawnY);
 
-        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        boolean conflict = MatrixOperations.intersect(
+                currentGameMatrix,
+                brickRotator.getCurrentShape(),
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY()
+        );
 
         if (!conflict) {
             return false;
         }
 
+        // When conflict on spawn => game over
         return handlePlayerDeath();
     }
 
@@ -190,7 +217,7 @@ public class SimpleBoard implements Board {
     public ViewData getViewData() {
         int[][] currentShape = brickRotator.getCurrentShape();
 
-        com.comp2042.logic.bricks.Brick nextBrick = brickGenerator.getNextBrick();
+        Brick nextBrick = brickGenerator.getNextBrick();
         int[][] nextShape;
 
         if (nextBrick != null
@@ -216,7 +243,12 @@ public class SimpleBoard implements Board {
 
     @Override
     public void mergeBrickToBackground() {
-        currentGameMatrix = MatrixOperations.merge(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        currentGameMatrix = MatrixOperations.merge(
+                currentGameMatrix,
+                brickRotator.getCurrentShape(),
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY()
+        );
     }
 
     @Override
@@ -228,7 +260,8 @@ public class SimpleBoard implements Board {
         if (linesRemoved > 0) {
             playerState.addLinesCleared(linesRemoved);
             if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
-                spawnZombieBoss(); //spawn once for now, change later
+                // spawn once for now, change later if needed
+                spawnZombieBoss();
                 playerState.setBossSpawned(true);
             }
 
@@ -244,19 +277,24 @@ public class SimpleBoard implements Board {
         return score;
     }
 
-
     @Override
     public void newGame() {
         currentGameMatrix = new int[height][width];
         score.reset();
 
-        int startX = width/2;
+        int startX = width / 2;
         int startY = 2;
-        playerY = startY;
         playerX = startX;
+        playerY = startY;
 
         playerState.setX(startX);
         playerState.setY(startY);
+
+        // reset death & effects
+        playerDead = false;
+        activeTnt.clear();
+        hasActiveLava = false;
+
         createNewBrick();
     }
 
@@ -265,14 +303,18 @@ public class SimpleBoard implements Board {
         int newX = playerX + dx;
         int newY = playerY + dy;
 
-        if (newX < 0 || newX >= width || newY < 0 || newY >= height){
-        return false;
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
+            return false;
         }
 
         int cell = currentGameMatrix[newY][newX];
+
+        // Touch skeleton or zombie => death
         if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE) {
-            boolean gameOver = handlePlayerDeath();
+            handlePlayerDeath();
+            return false;
         }
+
         playerX = newX;
         playerY = newY;
 
@@ -285,19 +327,14 @@ public class SimpleBoard implements Board {
         return playerState;
     }
 
-    private boolean handlePlayerDeath() {
-        if (playerState.hasTotem()) {
-            playerState.consumeTotem();
 
-            for (int y = 0; y < Math.min(2, height); y++) {
-                for (int x = 0; x < width; x++) {
-                    currentGameMatrix[y][x] = BLOCK_EMPTY;
-                }
-            }
-            return false;
-        } else {
-            return true;
-        }
+    public boolean isPlayerDead() {
+        return playerDead;
+    }
+
+    private boolean handlePlayerDeath() {
+        playerDead = true;
+        return true;
     }
 
     private void spawnZombieBoss() {
@@ -327,8 +364,9 @@ public class SimpleBoard implements Board {
             }
         }
     }
-    private void bossTick(){
-        if(!playerState.isBossSpawned() || playerState.isBossDead()){
+
+    private void bossTick() {
+        if (!playerState.isBossSpawned() || playerState.isBossDead()) {
             return;
         }
         java.util.List<Point> candidates = new java.util.ArrayList<>();
@@ -437,8 +475,6 @@ public class SimpleBoard implements Board {
         activeTnt.add(new TntEntry(x, y, now + 4000L));   // 4 seconds later
     }
 
-
-
     private void explodeAt(int cx, int cy) {
         for (int dy = -1; dy <= 1; dy++) {
             int yy = cy + dy;
@@ -457,37 +493,35 @@ public class SimpleBoard implements Board {
 
                 if (val == BLOCK_SKELETON) {
                     score.add(50);
-
                     currentGameMatrix[yy][xx] = BLOCK_EMPTY;
                 }
             }
         }
     }
 
-
-    private void dropLavaColumn(){
-            int x = playerState.getX();
-            if (x < 0 || x >= width) {
-                return;
-            }
-
-            for (int y = 0; y < height; y++) {
-                int v = currentGameMatrix[y][x];
-
-                if (v == BLOCK_EMPTY) {
-                    continue;
-                }
-
-                if (v == BLOCK_ZOMBIE) {
-                    playerState.damageBoss(10);
-                    continue;
-                }
-
-                currentGameMatrix[y][x] = BLOCK_LAVA;
-            }
-
-            hasActiveLava = true;
+    private void dropLavaColumn() {
+        int x = playerState.getX();
+        if (x < 0 || x >= width) {
+            return;
         }
+
+        for (int y = 0; y < height; y++) {
+            int v = currentGameMatrix[y][x];
+
+            if (v == BLOCK_EMPTY) {
+                continue;
+            }
+
+            if (v == BLOCK_ZOMBIE) {
+                playerState.damageBoss(10);
+                continue;
+            }
+
+            currentGameMatrix[y][x] = BLOCK_LAVA;
+        }
+
+        hasActiveLava = true;
+    }
 
     private void resolveLava() {
         if (!hasActiveLava) {
@@ -520,6 +554,7 @@ public class SimpleBoard implements Board {
             }
         }
     }
+
     private void explodeTnt(int cx, int cy) {
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {
@@ -550,5 +585,4 @@ public class SimpleBoard implements Board {
             currentGameMatrix[cy][cx] = BLOCK_EMPTY;
         }
     }
-
 }
