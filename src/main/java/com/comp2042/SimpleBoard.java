@@ -356,11 +356,43 @@ public class SimpleBoard implements Board {
             }
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
             playerState.setPlaceBlockCooldownEnd(now + 2500L);
+
+            ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
+            currentGameMatrix = clearRow.getNewMatrix();
+            int linesRemoved = clearRow.getLinesRemoved();
+            if (linesRemoved > 0) {
+                playerState.addLinesCleared(linesRemoved);
+                if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
+                    spawnZombieBoss();
+                    playerState.setBossSpawned(true);
+                }
+                if (playerState.isBossSpawned() && !playerState.isBossDead()) {
+                    playerState.damageBoss(linesRemoved * 10);
+                }
+            }
+
+            playerState.setPlaceBlockCooldownEnd(now + 5000L);
         } else {
             if (now < playerState.getDestroyBlockCooldownEnd()) {
                 return;
             }
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
+            ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
+            currentGameMatrix = clearRow.getNewMatrix();
+
+            int linesRemoved = clearRow.getLinesRemoved();
+            if (linesRemoved > 0) {
+                score.add(clearRow.getScoreBonus());
+                playerState.addLinesCleared(linesRemoved);
+                if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
+                    spawnZombieBoss();
+                    playerState.setBossSpawned(true);
+                }
+                if (playerState.isBossSpawned() && !playerState.isBossDead()) {
+                    playerState.damageBoss(linesRemoved * 10);
+                }
+            }
+
             playerState.setDestroyBlockCooldownEnd(now + 5000L);
         }
     }
