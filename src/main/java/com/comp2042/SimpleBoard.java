@@ -27,6 +27,8 @@ public class SimpleBoard implements Board {
 
     private final Random rng = new Random();
 
+    private int bossTickCounter = 0;
+
     private int playerX;
     private int playerY;
 
@@ -369,6 +371,13 @@ public class SimpleBoard implements Board {
         if (!playerState.isBossSpawned() || playerState.isBossDead()) {
             return;
         }
+        // Count drops; spawn on 5th drop
+        bossTickCounter++;
+        if (bossTickCounter < 5) {
+            return;
+        }
+        bossTickCounter = 0;
+
         java.util.List<Point> candidates = new java.util.ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -382,8 +391,12 @@ public class SimpleBoard implements Board {
             return;
         }
 
-        Point p = candidates.get(rng.nextInt(candidates.size()));
-        currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
+        // Turn up to 3 random blocks into skeletons
+        for (int n = 0; n < 3 && !candidates.isEmpty(); n++) {
+            int idx = rng.nextInt(candidates.size());
+            Point p = candidates.remove(idx);
+            currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
+        }
     }
 
     public void useAbilityOne() {
