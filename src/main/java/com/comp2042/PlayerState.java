@@ -4,8 +4,6 @@ public class PlayerState {
     private CharacterType characterType;
     private int x;
     private int y;
-    //totem
-    private boolean hasTotem = true;
 
     //skill cd
     private long placeBlockCooldownEnd;
@@ -46,15 +44,6 @@ public class PlayerState {
 
     public void setCharacterType(CharacterType characterType) {
         this.characterType = characterType;
-    }
-
-    //totem
-    public boolean hasTotem(){
-        return hasTotem;
-    }
-
-    public void consumeTotem(){
-        this.hasTotem = false;
     }
 
     //lines/boss

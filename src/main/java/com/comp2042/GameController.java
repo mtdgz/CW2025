@@ -2,12 +2,13 @@ package com.comp2042;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(25, 10);
+    private final Board board;
     private final GuiController viewGuiController;
 
     public GameController(GuiController c) {
         this.viewGuiController = c;
-        this.board = new SimpleBoard(25,10);
+        this.board = new SimpleBoard(25, 10);
+
         board.createNewBrick();
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
@@ -19,6 +20,7 @@ public class GameController implements InputEventListener {
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
         ClearRow clearRow = null;
+
         if (!canMove) {
             board.mergeBrickToBackground();
             clearRow = board.clearRows();
@@ -58,7 +60,6 @@ public class GameController implements InputEventListener {
         return board.getViewData();
     }
 
-
     @Override
     public void createNewGame() {
         board.newGame();
@@ -70,6 +71,15 @@ public class GameController implements InputEventListener {
     @Override
     public void onPlayerMove(int dx, int dy) {
         boolean moved = board.movePlayer(dx, dy);
+
+        // If player died (touch skeleton/zombie), end game
+        if (board instanceof SimpleBoard sb && sb.isPlayerDead()) {
+            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            viewGuiController.refreshBrick(board.getViewData());
+            viewGuiController.gameOver();
+            return;
+        }
+
         if (moved) {
             ViewData viewData = board.getViewData();
             viewGuiController.refreshBrick(viewData);
@@ -98,5 +108,4 @@ public class GameController implements InputEventListener {
             viewGuiController.updateCooldowns(sb.getPlayerState());
         }
     }
-
 }
