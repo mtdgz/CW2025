@@ -215,3 +215,47 @@
 .hardcore-button {
     -fx-text-fill: #ff5555;
 }
+/* Full-screen translucent red overlay */
+.death-overlay {
+    -fx-background-color: rgba(160, 0, 0, 0.65); /* whole screen red tint */
+}
+
+/* "You died!" title */
+.death-title {
+    -fx-font-family: "Minecraft Ten";
+    -fx-font-size: 42;
+    -fx-text-fill: #ffdfdf;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.9), 8, 0.8, 0, 2);
+}
+
+/* Score text under title */
+.death-score {
+    -fx-font-family: "Minecraft Ten";
+    -fx-font-size: 22;
+    -fx-text-fill: #ffeaa7;
+    -fx-padding: 5 0 15 0;
+}
+
+/* Buttons: respawn / title screen */
+.death-button {
+    -fx-background-color: linear-gradient(#6b4423, #4a2f18);
+    -fx-text-fill: #f8f0c8;
+    -fx-background-radius: 4;
+    -fx-border-color: #d2a965;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-font-family: "Minecraft Ten";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14 6 14;
+}
+
+.death-button:hover {
+    -fx-background-color: linear-gradient(#8c5a30, #5a371c);
+    -fx-opacity: 0.95;
+}
+
+.death-button:pressed {
+    -fx-background-color: linear-gradient(#3c2413, #29170b);
+    -fx-translate-y: 1;
+}

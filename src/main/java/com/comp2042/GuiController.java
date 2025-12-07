@@ -31,6 +31,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,6 +41,9 @@ public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
     @FXML
     public BorderPane gameBoard;
+
+    @FXML
+    private StackPane rootStackPane;
 
     @FXML
     private Label scoreLabel;
@@ -64,6 +68,12 @@ public class GuiController implements Initializable {
 
     @FXML
     private Label abilityTwoLabel;
+
+    @FXML
+    private BorderPane deathOverlay;
+
+    @FXML
+    private Label deathScoreLabel;
 
     private final List<Rectangle> ghostRects = new ArrayList<>();
 
@@ -198,7 +208,9 @@ public class GuiController implements Initializable {
                 }
             }
         });
-        gameOverPanel.setVisible(false);
+        if (deathOverlay != null) {
+            deathOverlay.setVisible(false);
+        }
 
         final Reflection reflection = new Reflection();
         reflection.setFraction(0.8);
@@ -244,15 +256,6 @@ public class GuiController implements Initializable {
             gamePanel.getChildren().add(playerRect);
         }
 
-        int intervalMs;
-        Difficulty diff = GameConfig.getSelectedDifficulty();
-        if (diff == Difficulty.PEACEFUL) {
-            intervalMs = 650;   // peaceful
-        } else if (diff == Difficulty.HARDCORE) {
-            intervalMs = 250;   // hardcore
-        } else {
-            intervalMs = 400;   // normal
-        }
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(GameConfig.fallSpeed()),
@@ -394,17 +397,22 @@ public class GuiController implements Initializable {
     }
 
     public void gameOver() {
-        timeLine.stop();
-        gameOverPanel.setVisible(true);
-        isGameOver.setValue(Boolean.TRUE);
-        try {
-            int currentScore = Integer.parseInt(scoreLabel.getText());
-            gameOverPanel.setScore(currentScore);
-        } catch (NumberFormatException e) {
-            gameOverPanel.setScore(0);
+        if (timeLine != null) {
+            timeLine.stop();
         }
+        isGameOver.set(true);
 
-        gameOverPanel.setVisible(true);
+        int score = 0;
+        try {
+            score = Integer.parseInt(scoreLabel.getText());
+        } catch (NumberFormatException ignored) { }
+
+        if (deathScoreLabel != null) {
+            deathScoreLabel.setText("Score: " + score);
+        }
+        if (deathOverlay != null) {
+            deathOverlay.setVisible(true);
+        }
     }
 
     public void newGame(ActionEvent actionEvent) {
@@ -544,6 +552,8 @@ public class GuiController implements Initializable {
         double secondsLeft = millisLeft / 1000.0;
         return String.format("(%.1fs)", secondsLeft);
     }
+
+    @FXML
     public void onReturnHome(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
@@ -554,6 +564,16 @@ public class GuiController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void onRespawn(ActionEvent e) {
+        newGame(null);
+    }
+
+    @FXML
+    private void onReturnHomeFromDeath(ActionEvent e) {
+        onReturnHome(e);
     }
 
 }

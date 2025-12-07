@@ -20,6 +20,7 @@ public class GameOverPanel extends StackPane {
         // overlay look
         setVisible(false);
         setPickOnBounds(true); // block clicks to underlying UI
+        setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         getStyleClass().add("you-died-overlay");
 
         titleLabel = new Label("You Died!");

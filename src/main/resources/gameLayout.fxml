@@ -6,12 +6,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.Separator?>
 
-<Pane fx:controller="com.comp2042.GuiController"
+<StackPane fx:controller="com.comp2042.GuiController"
+           fx:id="rootStackPane"
       xmlns:fx="http://javafx.com/fxml">
-
-    <HBox spacing="20">
+    <children>
+            <Pane fx:id="gameRootPane">
+                    <children>
+        <HBox spacing="20">
         <BorderPane styleClass="gameBoard" fx:id="gameBoard">
             <center>
                 <GridPane fx:id="gamePanel" id="gamePanel" hgap="1" vgap="1"/>
@@ -53,13 +57,39 @@
     <GridPane fx:id="brickPanel"
               vgap="1" hgap="1"/>
 
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203">
-        <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
-        </VBox>
-    </Group>
+    <Group fx:id="groupNotification" layoutX="14" layoutY="203"/>
+    </children>
+    </Pane>
+
+
+    <BorderPane fx:id="deathOverlay"
+                visible="false"
+                pickOnBounds="true"
+                styleClass="death-overlay">
+        <center>
+            <VBox alignment="CENTER" spacing="12">
+                <Label text="You died!"
+                       styleClass="death-title"/>
+
+                <Label fx:id="deathScoreLabel"
+                       text="Score: 0"
+                       styleClass="death-score"/>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <Button text="Respawn"
+                            onAction="#onRespawn"
+                            styleClass="death-button"/>
+                    <Button text="Title Screen"
+                            onAction="#onReturnHomeFromDeath"
+                            styleClass="death-button"/>
+                </HBox>
+            </VBox>
+        </center>
+    </BorderPane>
+    </children>
+
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
 
-</Pane>
+</StackPane>
