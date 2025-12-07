@@ -118,7 +118,6 @@ public class SimpleBoard implements Board {
             return false;
         } else {
             currentOffset = p;
-            bossTick();
             tickTnt();
             resolveLava();
             return true;
@@ -290,8 +289,7 @@ public class SimpleBoard implements Board {
         playerX = startX;
         playerY = startY;
 
-        playerState.setX(startX);
-        playerState.setY(startY);
+        playerState.resetForNewGame(startX,startY);
 
         // reset death & effects
         playerDead = false;
@@ -344,7 +342,7 @@ public class SimpleBoard implements Board {
 
         int baseY = height - 2;
         int spawnX = width / 2 - 1;
-        // clamp in case width is very small
+
         if (spawnX < 0) {
             spawnX = 0;
         }
@@ -362,29 +360,21 @@ public class SimpleBoard implements Board {
     }
 
 
-    private void bossTick() {
-        // Only do anything if boss is alive
+    public void onPieceLanded() {
         if (!playerState.isBossSpawned() || playerState.isBossDead()) {
             return;
         }
-
-        // Count brick drops; only spawn skeletons every 5th drop
-        skeletonTickCounter++;
-        if (skeletonTickCounter < 5) {
-            return;
-        }
-        skeletonTickCounter = 0;
 
         java.util.List<Point> candidates = new java.util.ArrayList<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int v = currentGameMatrix[y][x];
-                if (v != BLOCK_EMPTY
-                        && v != BLOCK_ZOMBIE
-                        && v != BLOCK_SKELETON
-                        && v != BLOCK_TNT
-                        && v != BLOCK_LAVA) {
+                if (v != BLOCK_EMPTY &&
+                        v != BLOCK_ZOMBIE &&
+                        v != BLOCK_SKELETON &&
+                        v != BLOCK_TNT &&
+                        v != BLOCK_LAVA) {
                     candidates.add(new Point(x, y));
                 }
             }
@@ -394,13 +384,8 @@ public class SimpleBoard implements Board {
             return;
         }
 
-
-        java.util.Collections.shuffle(candidates, rng);
-        int max = Math.min(1, candidates.size());
-        for (int i = 0; i < max; i++) {
-            Point p = candidates.get(i);
-            currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
-        }
+        Point p = candidates.get(rng.nextInt(candidates.size()));
+        currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
     }
 
 
@@ -491,30 +476,6 @@ public class SimpleBoard implements Board {
         currentGameMatrix[y][x] = BLOCK_TNT;
         long now = System.currentTimeMillis();
         activeTnt.add(new TntEntry(x, y, now + 2000L));   // 2 seconds later
-    }
-
-    private void explodeAt(int cx, int cy) {
-        for (int dy = -1; dy <= 1; dy++) {
-            int yy = cy + dy;
-            if (yy < 0 || yy >= height) continue;
-
-            for (int dx = -1; dx <= 1; dx++) {
-                int xx = cx + dx;
-                if (xx < 0 || xx >= width) continue;
-
-                int val = currentGameMatrix[yy][xx];
-
-                if (val == BLOCK_ZOMBIE) {
-                    playerState.damageBoss(20);
-                    score.add(200);
-                }
-
-                if (val == BLOCK_SKELETON) {
-                    score.add(50);
-                    currentGameMatrix[yy][xx] = BLOCK_EMPTY;
-                }
-            }
-        }
     }
 
     private void dropLavaColumn() {

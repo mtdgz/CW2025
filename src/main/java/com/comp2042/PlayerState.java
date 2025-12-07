@@ -106,4 +106,21 @@ public class PlayerState {
     public void setTntCooldownEnd(long tntCooldownEnd) {
         this.tntCooldownEnd = tntCooldownEnd;
     }
+
+    public void resetForNewGame(int startX, int startY) {
+        this.x = startX;
+        this.y = startY;
+
+        // reset lines / boss
+        this.totalLinesCleared = 0;
+        this.bossSpawned = false;
+        this.bossHp = 100;
+
+        // reset all cooldowns
+        this.placeBlockCooldownEnd = 0L;
+        this.tntCooldownEnd = 0L;
+        this.destroyBlockCooldownEnd = 0L;
+        this.lavaCooldownEnd = 0L;
+    }
+
 }
