@@ -416,13 +416,29 @@ public class GuiController implements Initializable {
     }
 
     public void newGame(ActionEvent actionEvent) {
-        timeLine.stop();
-        gameOverPanel.setVisible(false);
+        if (timeLine != null) {
+            timeLine.stop();
+        }
+
+        // hide death overlay
+        if (deathOverlay != null) {
+            deathOverlay.setVisible(false);
+        }
+
+        isGameOver.set(false);
+        isPause.set(false);
+
+        // reset board
         eventListener.createNewGame();
         gamePanel.requestFocus();
+
+        // restart falling loop with current difficulty
+        timeLine = new Timeline(new KeyFrame(
+                Duration.millis(GameConfig.fallSpeed()),
+                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+        ));
+        timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
-        isPause.setValue(Boolean.FALSE);
-        isGameOver.setValue(Boolean.FALSE);
     }
 
     public void pauseGame(ActionEvent actionEvent) {
