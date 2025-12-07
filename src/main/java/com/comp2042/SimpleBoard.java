@@ -27,12 +27,13 @@ public class SimpleBoard implements Board {
 
     private final Random rng = new Random();
 
-    private int bossTickCounter = 0;
-
     private int playerX;
     private int playerY;
 
-    // NEW: track TNT entries
+    private int skeletonTickCounter = 0;
+
+
+    //track TNT entries
     private static class TntEntry {
         final int x;
         final int y;
@@ -340,22 +341,15 @@ public class SimpleBoard implements Board {
     }
 
     private void spawnZombieBoss() {
+
         int baseY = height - 2;
-        int spawnX = -1;
-
-        for (int x = 0; x < width - 1; x++) {
-            if (currentGameMatrix[baseY][x] == BLOCK_EMPTY &&
-                    currentGameMatrix[baseY][x + 1] == BLOCK_EMPTY &&
-                    currentGameMatrix[baseY + 1][x] == BLOCK_EMPTY &&
-                    currentGameMatrix[baseY + 1][x + 1] == BLOCK_EMPTY) {
-
-                spawnX = x;
-                break;
-            }
+        int spawnX = width / 2 - 1;
+        // clamp in case width is very small
+        if (spawnX < 0) {
+            spawnX = 0;
         }
-
-        if (spawnX == -1) {
-            return;
+        if (spawnX + 1 >= width) {
+            spawnX = Math.max(0, width - 2);
         }
 
         for (int dy = 0; dy < 2; dy++) {
@@ -367,37 +361,48 @@ public class SimpleBoard implements Board {
         }
     }
 
+
     private void bossTick() {
+        // Only do anything if boss is alive
         if (!playerState.isBossSpawned() || playerState.isBossDead()) {
             return;
         }
-        // Count drops; spawn on 5th drop
-        bossTickCounter++;
-        if (bossTickCounter < 5) {
+
+        // Count brick drops; only spawn skeletons every 5th drop
+        skeletonTickCounter++;
+        if (skeletonTickCounter < 5) {
             return;
         }
-        bossTickCounter = 0;
+        skeletonTickCounter = 0;
 
         java.util.List<Point> candidates = new java.util.ArrayList<>();
+
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int v = currentGameMatrix[y][x];
-                if (v != BLOCK_EMPTY && v != BLOCK_ZOMBIE && v != BLOCK_SKELETON) {
+                if (v != BLOCK_EMPTY
+                        && v != BLOCK_ZOMBIE
+                        && v != BLOCK_SKELETON
+                        && v != BLOCK_TNT
+                        && v != BLOCK_LAVA) {
                     candidates.add(new Point(x, y));
                 }
             }
         }
+
         if (candidates.isEmpty()) {
             return;
         }
 
-        // Turn up to 3 random blocks into skeletons
-        for (int n = 0; n < 3 && !candidates.isEmpty(); n++) {
-            int idx = rng.nextInt(candidates.size());
-            Point p = candidates.remove(idx);
+
+        java.util.Collections.shuffle(candidates, rng);
+        int max = Math.min(1, candidates.size());
+        for (int i = 0; i < max; i++) {
+            Point p = candidates.get(i);
             currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
         }
     }
+
 
     public void useAbilityOne() {
         long now = System.currentTimeMillis();
@@ -455,7 +460,7 @@ public class SimpleBoard implements Board {
                 return;
             }
             marktTntUnder();
-            playerState.setTntCooldownEnd(now + 2500L);
+            playerState.setTntCooldownEnd(now + 5000L);
         } else {
             if (now < playerState.getLavaCooldownEnd()) {
                 return;
@@ -485,7 +490,7 @@ public class SimpleBoard implements Board {
 
         currentGameMatrix[y][x] = BLOCK_TNT;
         long now = System.currentTimeMillis();
-        activeTnt.add(new TntEntry(x, y, now + 4000L));   // 4 seconds later
+        activeTnt.add(new TntEntry(x, y, now + 2000L));   // 2 seconds later
     }
 
     private void explodeAt(int cx, int cy) {
@@ -526,7 +531,7 @@ public class SimpleBoard implements Board {
             }
 
             if (v == BLOCK_ZOMBIE) {
-                playerState.damageBoss(10);
+                playerState.damageBoss(20);
                 continue;
             }
 
