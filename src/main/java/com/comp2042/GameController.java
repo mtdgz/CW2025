@@ -23,6 +23,10 @@ public class GameController implements InputEventListener {
 
         if (!canMove) {
             board.mergeBrickToBackground();
+
+            if (board instanceof SimpleBoard sb) {
+                sb.onPieceLanded();
+            }
             clearRow = board.clearRows();
             if (clearRow.getLinesRemoved() > 0) {
                 board.getScore().add(clearRow.getScoreBonus());
