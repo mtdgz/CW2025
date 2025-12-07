@@ -397,6 +397,14 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
+        try {
+            int currentScore = Integer.parseInt(scoreLabel.getText());
+            gameOverPanel.setScore(currentScore);
+        } catch (NumberFormatException e) {
+            gameOverPanel.setScore(0);
+        }
+
+        gameOverPanel.setVisible(true);
     }
 
     public void newGame(ActionEvent actionEvent) {
