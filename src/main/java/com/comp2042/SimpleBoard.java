@@ -33,7 +33,6 @@ public class SimpleBoard implements Board {
     private int skeletonTickCounter = 0;
 
 
-    //track TNT entries
     private static class TntEntry {
         final int x;
         final int y;
@@ -119,6 +118,7 @@ public class SimpleBoard implements Board {
         } else {
             currentOffset = p;
             tickTnt();
+            bossTick();
             resolveLava();
             return true;
         }
@@ -268,7 +268,7 @@ public class SimpleBoard implements Board {
             }
 
             if (playerState.isBossSpawned() && !playerState.isBossDead()) {
-                playerState.damageBoss(linesRemoved * 10);
+                damageBossWithSound(linesRemoved * 10);
             }
         }
         return clearRow;
@@ -312,6 +312,7 @@ public class SimpleBoard implements Board {
 
         // Touch skeleton or zombie => death
         if (cell == BLOCK_SKELETON || cell == BLOCK_ZOMBIE) {
+            SoundManager.getInstance().playPlayerDie();
             handlePlayerDeath();
             return false;
         }
@@ -338,6 +339,25 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    private void damageBossWithSound(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        int before = playerState.getBossHp();
+        if (before <= 0) {
+            return;
+        }
+
+        playerState.damageBoss(amount);
+
+        int after = playerState.getBossHp();
+        if (after <= 0 && before > 0) {
+            SoundManager.getInstance().playZombieDeath();
+        } else {
+            SoundManager.getInstance().playZombieDeath();
+        }
+    }
+
     private void spawnZombieBoss() {
 
         int baseY = height - 2;
@@ -357,8 +377,42 @@ public class SimpleBoard implements Board {
                 currentGameMatrix[by][bx] = BLOCK_ZOMBIE;
             }
         }
+
+        SoundManager.getInstance().playZombieSpawn();
     }
 
+    private void bossTick() {
+        if (!playerState.isBossSpawned() || playerState.isBossDead()) {
+            return;
+        }
+
+        java.util.List<Point> candidates = new java.util.ArrayList<>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int v = currentGameMatrix[y][x];
+
+                if (v != BLOCK_EMPTY &&
+                        v != BLOCK_ZOMBIE &&
+                        v != BLOCK_SKELETON &&
+                        v != BLOCK_TNT &&
+                        v != BLOCK_LAVA) {
+                    candidates.add(new Point(x, y));
+                }
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            return;
+        }
+
+        java.util.Collections.shuffle(candidates, rng);
+        Point target = candidates.get(0);
+
+        SoundManager.getInstance().playSkeletonSpawn();
+
+        currentGameMatrix[target.y][target.x] = BLOCK_SKELETON;
+    }
 
     public void onPieceLanded() {
         if (!playerState.isBossSpawned() || playerState.isBossDead()) {
@@ -396,19 +450,21 @@ public class SimpleBoard implements Board {
                 return;
             }
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
+            SoundManager.getInstance().playPlaceBlock();
             playerState.setPlaceBlockCooldownEnd(now + 2500L);
 
             ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
             currentGameMatrix = clearRow.getNewMatrix();
             int linesRemoved = clearRow.getLinesRemoved();
             if (linesRemoved > 0) {
+                SoundManager.getInstance().playRowElim();
                 playerState.addLinesCleared(linesRemoved);
                 if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
                     spawnZombieBoss();
                     playerState.setBossSpawned(true);
                 }
                 if (playerState.isBossSpawned() && !playerState.isBossDead()) {
-                    playerState.damageBoss(linesRemoved * 10);
+                    damageBossWithSound(linesRemoved * 10);
                 }
             }
 
@@ -418,11 +474,13 @@ public class SimpleBoard implements Board {
                 return;
             }
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
+            SoundManager.getInstance().playElimBlock();
             ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
             currentGameMatrix = clearRow.getNewMatrix();
 
             int linesRemoved = clearRow.getLinesRemoved();
             if (linesRemoved > 0) {
+                SoundManager.getInstance().playRowElim();
                 score.add(clearRow.getScoreBonus());
                 playerState.addLinesCleared(linesRemoved);
                 if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
@@ -430,7 +488,7 @@ public class SimpleBoard implements Board {
                     playerState.setBossSpawned(true);
                 }
                 if (playerState.isBossSpawned() && !playerState.isBossDead()) {
-                    playerState.damageBoss(linesRemoved * 10);
+                    damageBossWithSound(linesRemoved * 10);
                 }
             }
 
@@ -475,7 +533,8 @@ public class SimpleBoard implements Board {
 
         currentGameMatrix[y][x] = BLOCK_TNT;
         long now = System.currentTimeMillis();
-        activeTnt.add(new TntEntry(x, y, now + 2000L));   // 2 seconds later
+        activeTnt.add(new TntEntry(x, y, now + 2000L));
+        SoundManager.getInstance().playTntPlace();
     }
 
     private void dropLavaColumn() {
@@ -483,6 +542,7 @@ public class SimpleBoard implements Board {
         if (x < 0 || x >= width) {
             return;
         }
+        boolean anyLava = false;
 
         for (int y = 0; y < height; y++) {
             int v = currentGameMatrix[y][x];
@@ -492,13 +552,17 @@ public class SimpleBoard implements Board {
             }
 
             if (v == BLOCK_ZOMBIE) {
-                playerState.damageBoss(20);
+                damageBossWithSound(10);
+                score.add(100);
                 continue;
             }
 
             currentGameMatrix[y][x] = BLOCK_LAVA;
+            anyLava = true;
         }
-
+        if (anyLava) {
+            SoundManager.getInstance().playLava();
+        }
         hasActiveLava = true;
     }
 
@@ -534,7 +598,10 @@ public class SimpleBoard implements Board {
         }
     }
 
+
     private void explodeTnt(int cx, int cy) {
+        SoundManager.getInstance().playTntExplode();
+
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {
                 int x = cx + dx;
@@ -547,7 +614,7 @@ public class SimpleBoard implements Board {
                 int v = currentGameMatrix[y][x];
 
                 if (v == BLOCK_ZOMBIE) {
-                    playerState.damageBoss(15);
+                    damageBossWithSound(15);
                     continue;
                 }
 

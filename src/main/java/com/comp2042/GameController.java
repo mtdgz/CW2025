@@ -23,6 +23,7 @@ public class GameController implements InputEventListener {
 
         if (!canMove) {
             board.mergeBrickToBackground();
+            SoundManager.getInstance().playPlaceBlock();
 
             if (board instanceof SimpleBoard sb) {
                 sb.onPieceLanded();
@@ -30,8 +31,10 @@ public class GameController implements InputEventListener {
             clearRow = board.clearRows();
             if (clearRow.getLinesRemoved() > 0) {
                 board.getScore().add(clearRow.getScoreBonus());
+                SoundManager.getInstance().playRowElim();
             }
             if (board.createNewBrick()) {
+                SoundManager.getInstance().playGameEnd();
                 viewGuiController.gameOver();
             }
 

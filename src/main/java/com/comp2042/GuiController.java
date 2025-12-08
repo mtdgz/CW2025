@@ -416,6 +416,7 @@ public class GuiController implements Initializable {
     }
 
     public void newGame(ActionEvent actionEvent) {
+        SoundManager.getInstance().playButtonClick();
         if (timeLine != null) {
             timeLine.stop();
         }
@@ -442,6 +443,7 @@ public class GuiController implements Initializable {
     }
 
     public void pauseGame(ActionEvent actionEvent) {
+        SoundManager.getInstance().playButtonClick();
 
         if (isGameOver.get()) {
             return;
@@ -571,6 +573,7 @@ public class GuiController implements Initializable {
 
     @FXML
     public void onReturnHome(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

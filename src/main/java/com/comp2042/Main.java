@@ -38,6 +38,8 @@ public class Main extends Application {
         primaryStage.setTitle("Tetris Minecraft Edition");
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        SoundManager.getInstance().playBgm();
     }
 
 

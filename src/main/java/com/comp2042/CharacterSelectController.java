@@ -18,22 +18,25 @@ public class CharacterSelectController {
 
     @FXML
     private void onChooseSteve(ActionEvent event) throws IOException {
+        SoundManager.getInstance().playButtonClick();
         GameConfig.setSelectedCharacter(CharacterType.STEVE);
         goBackToHome(event);
     }
 
     @FXML
     private void onChooseAlex(ActionEvent event) throws IOException {
+        SoundManager.getInstance().playButtonClick();
         GameConfig.setSelectedCharacter(CharacterType.ALEX);
         goBackToHome(event);
     }
 
     @FXML
-    private void onBackToHome(ActionEvent event) throws IOException{
+    private void onBackToHome(ActionEvent event) throws IOException {
         goBackToHome(event);
     }
 
     private void goBackToHome(ActionEvent event) throws IOException{
+        SoundManager.getInstance().playButtonClick();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/homeLayout.fxml"));
         Parent root = loader.load();
 

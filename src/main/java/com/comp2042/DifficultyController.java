@@ -26,28 +26,33 @@ public class DifficultyController {
     }
     @FXML
     private void choosePeaceful(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         GameConfig.setSelectedDifficulty(Difficulty.PEACEFUL);
         closeWindowFrom(event);
     }
 
     @FXML
     private void chooseNormal(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         GameConfig.setSelectedDifficulty(Difficulty.NORMAL);
         closeWindowFrom(event);
     }
 
     @FXML
     private void chooseHardcore(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         GameConfig.setSelectedDifficulty(Difficulty.HARDCORE);
         closeWindowFrom(event);
     }
 
     @FXML
     private void goBack(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         closeWindowFrom(event);
     }
 
     private void closeWindowFrom(ActionEvent event) {
+        SoundManager.getInstance().playButtonClick();
         Object source = event.getSource();
         if (source instanceof Button button && button.getScene() != null) {
             Stage stage = (Stage) button.getScene().getWindow();

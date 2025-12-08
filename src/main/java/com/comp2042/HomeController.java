@@ -27,6 +27,7 @@ public class HomeController {
 
     @FXML
     private void onStartGame(ActionEvent event) throws IOException {
+        SoundManager.getInstance().playButtonClick();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
         Parent root = loader.load();
 
@@ -42,13 +43,14 @@ public class HomeController {
 
     @FXML
     private void onChooseDifficulty() throws Exception {
+        SoundManager.getInstance().playButtonClick();
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/difficultyLayout.fxml"));
         Parent root = loader.load();
 
         Stage popup = new Stage();
         popup.setTitle("Select Difficulty");
-        popup.setScene(new Scene(root, 460, 300)); // adjust size if you like
+        popup.setScene(new Scene(root, 460, 300));
         popup.setResizable(false);
         popup.initOwner(stage);
         popup.showAndWait();
@@ -56,6 +58,7 @@ public class HomeController {
 
     @FXML
     public void onChooseCharacter(ActionEvent event) throws IOException {
+        SoundManager.getInstance().playButtonClick();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/characterSelect.fxml"));
         Parent root = loader.load();
 
