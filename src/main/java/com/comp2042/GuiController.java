@@ -6,7 +6,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -14,9 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -31,9 +31,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
-import javafx.scene.layout.StackPane;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class GuiController implements Initializable {
@@ -41,9 +41,8 @@ public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
     @FXML
     public BorderPane gameBoard;
-
-    @FXML
-    private StackPane rootStackPane;
+    public StackPane rootStackPane;
+    public Pane gameRootPane;
 
     @FXML
     private Label scoreLabel;
@@ -56,9 +55,6 @@ public class GuiController implements Initializable {
 
     @FXML
     private GridPane brickPanel;
-
-    @FXML
-    private GameOverPanel gameOverPanel;
 
     @FXML
     private GridPane nextBrickPanel;
@@ -116,96 +112,93 @@ public class GuiController implements Initializable {
         }
 
         cobblestonePaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Cobblestone.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Cobblestone.png")).toExternalForm())
         );
         copperPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Copper.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Copper.png")).toExternalForm())
         );
         diamondPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Diamond.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Diamond.png")).toExternalForm())
         );
         logPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Log.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Log.png")).toExternalForm())
         );
         glowstonePaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Glowstone.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Glowstone.png")).toExternalForm())
         );
         obsidianPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Obsidian.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Obsidian.png")).toExternalForm())
         );
         sandstonePaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/Sandstone.png").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/Sandstone.png")).toExternalForm())
         );
         stevePaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/steve.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/steve.jpg")).toExternalForm())
         );
         alexPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/alex.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/alex.jpg")).toExternalForm())
         );
         lavaPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/lava.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/lava.jpg")).toExternalForm())
         );
         tntPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/tnt.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/tnt.jpg")).toExternalForm())
         );
         zombiePaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/zombie.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/zombie.jpg")).toExternalForm())
         );
         skeletonPaint = new ImagePattern(
-                new Image(getClass().getResource("/textures/skeleton.jpg").toExternalForm())
+                new Image(Objects.requireNonNull(getClass().getResource("/textures/skeleton.jpg")).toExternalForm())
         );
 
 
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
-        gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
-                    if (keyEvent.getCode() == KeyCode.LEFT) {
-                        refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT) {
-                        refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.UP ) {
-                        refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.DOWN) {
-                        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.A) {
-                        eventListener.onPlayerMove(-1, 0);
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.D) {
-                        eventListener.onPlayerMove(1, 0);
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.W) {
-                        eventListener.onPlayerMove(0, -1);
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.S) {
-                        eventListener.onPlayerMove(0, 1);
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.Q) {
-                        eventListener.onAbilityOne();
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.E) {
-                        eventListener.onAbilityTwo();
-                        keyEvent.consume();
-                    }
+        gamePanel.setOnKeyPressed(keyEvent -> {
+            if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
+                if (keyEvent.getCode() == KeyCode.LEFT) {
+                    refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventSource.USER)));
+                    keyEvent.consume();
                 }
-                if (keyEvent.getCode() == KeyCode.N) {
-                    newGame(null);
+                if (keyEvent.getCode() == KeyCode.RIGHT) {
+                    refreshBrick(eventListener.onRightEvent(new MoveEvent(EventSource.USER)));
+                    keyEvent.consume();
                 }
+                if (keyEvent.getCode() == KeyCode.UP) {
+                    refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventSource.USER)));
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.DOWN) {
+                    moveDown(new MoveEvent(EventSource.USER));
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.A) {
+                    eventListener.onPlayerMove(-1, 0);
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.D) {
+                    eventListener.onPlayerMove(1, 0);
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.W) {
+                    eventListener.onPlayerMove(0, -1);
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.S) {
+                    eventListener.onPlayerMove(0, 1);
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.Q) {
+                    eventListener.onAbilityOne();
+                    keyEvent.consume();
+                }
+                if (keyEvent.getCode() == KeyCode.E) {
+                    eventListener.onAbilityTwo();
+                    keyEvent.consume();
+                }
+            }
+            if (keyEvent.getCode() == KeyCode.N) {
+                newGame();
             }
         });
         if (deathOverlay != null) {
@@ -228,24 +221,24 @@ public class GuiController implements Initializable {
                 gamePanel.add(rectangle, j, i - 2);
             }
         }
-        rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
-        for (int i = 0; i < brick.getBrickData().length; i++) {
-            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+        rectangles = new Rectangle[brick.brickData().length][brick.brickData()[0].length];
+        for (int i = 0; i < brick.brickData().length; i++) {
+            for (int j = 0; j < brick.brickData()[i].length; j++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(getFillColor(brick.getBrickData()[i][j]));
+                rectangle.setFill(getFillColor(brick.brickData()[i][j]));
                 rectangles[i][j] = rectangle;
                 brickPanel.add(rectangle, j, i);
             }
         }
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.xPosition() * brickPanel.getVgap() + brick.xPosition() * BRICK_SIZE);
+        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.yPosition() * brickPanel.getHgap() + brick.yPosition() * BRICK_SIZE);
 
         playerRect = new Rectangle(BRICK_SIZE,BRICK_SIZE);
         playerRect.setArcWidth(0);
         playerRect.setArcHeight(0);
         updatePlayerSkin();
-        int pX = brick.getPlayerX();
-        int pY = brick.getPlayerY();
+        int pX = brick.playerX();
+        int pY = brick.playerY();
         int visibleRow = pY - 2;
         if (visibleRow >= 0) {
             GridPane.setColumnIndex(playerRect, pX);
@@ -259,7 +252,7 @@ public class GuiController implements Initializable {
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(GameConfig.fallSpeed()),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+                _ -> moveDown(new MoveEvent(EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
@@ -268,49 +261,21 @@ public class GuiController implements Initializable {
     }
 
     private Paint getFillColor(int i) {
-        Paint returnPaint;
-        switch (i) {
-            case 0:
-                returnPaint = Color.TRANSPARENT;
-                break;
-            case 1:
-                returnPaint = cobblestonePaint;
-                break;
-            case 2:
-                returnPaint = copperPaint;
-                break;
-            case 3:
-                returnPaint = diamondPaint;
-                break;
-            case 4:
-                returnPaint = logPaint;
-                break;
-            case 5:
-                returnPaint = glowstonePaint;
-                break;
-            case 6:
-                returnPaint = obsidianPaint;
-                break;
-            case 7:
-                returnPaint = sandstonePaint;
-                break;
-            case 8:
-                returnPaint = skeletonPaint;
-                break;
-            case 9:
-                returnPaint = zombiePaint;
-                break;
-            case 10:
-                returnPaint = tntPaint;
-                break;
-            case 11:
-                returnPaint = lavaPaint;
-                break;
-            default:
-                returnPaint = Color.WHITE;
-                break;
-        }
-        return returnPaint;
+        return switch (i) {
+            case 0 -> Color.TRANSPARENT;
+            case 1 -> cobblestonePaint;
+            case 2 -> copperPaint;
+            case 3 -> diamondPaint;
+            case 4 -> logPaint;
+            case 5 -> glowstonePaint;
+            case 6 -> obsidianPaint;
+            case 7 -> sandstonePaint;
+            case 8 -> skeletonPaint;
+            case 9 -> zombiePaint;
+            case 10 -> tntPaint;
+            case 11 -> lavaPaint;
+            default -> Color.WHITE;
+        };
     }
 
 
@@ -321,18 +286,18 @@ public class GuiController implements Initializable {
 
             brickPanel.setLayoutX(
                     gamePanel.getLayoutX()
-                    + brick.getxPosition()*BRICK_SIZE
+                    + brick.xPosition()*BRICK_SIZE
             );
 
             brickPanel.setLayoutY(
                     gamePanel.getLayoutY()
-                    +brick.getyPosition()*BRICK_SIZE
+                    +brick.yPosition()*BRICK_SIZE
             );
-            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-            brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
-            for (int i = 0; i < brick.getBrickData().length; i++) {
-                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                    setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
+            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.xPosition() * brickPanel.getVgap() + brick.xPosition() * BRICK_SIZE);
+            brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.yPosition() * brickPanel.getHgap() + brick.yPosition() * BRICK_SIZE);
+            for (int i = 0; i < brick.brickData().length; i++) {
+                for (int j = 0; j < brick.brickData()[i].length; j++) {
+                    setRectangleData(brick.brickData()[i][j], rectangles[i][j]);
                 }
             }
             updatePlayerPosition(brick);
@@ -344,8 +309,8 @@ public class GuiController implements Initializable {
             return;
         }
 
-        int pX = brick.getPlayerX();
-        int pY = brick.getPlayerY();
+        int pX = brick.playerX();
+        int pY = brick.playerY();
 
         int visibleRow = pY - 2;
         if (visibleRow < 0){
@@ -375,13 +340,13 @@ public class GuiController implements Initializable {
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onDownEvent(event);
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
+            if (downData.clearRow() != null && downData.clearRow().linesRemoved() > 0) {
+                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.clearRow().scoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             }
 
-            ViewData viewData = downData.getViewData();
+            ViewData viewData = downData.viewData();
             refreshBrick(viewData);
             refreshNextBrick(viewData);
         }
@@ -415,7 +380,7 @@ public class GuiController implements Initializable {
         }
     }
 
-    public void newGame(ActionEvent actionEvent) {
+    public void newGame() {
         SoundManager.getInstance().playButtonClick();
         if (timeLine != null) {
             timeLine.stop();
@@ -436,13 +401,13 @@ public class GuiController implements Initializable {
         // restart falling loop with current difficulty
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(GameConfig.fallSpeed()),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+                _ -> moveDown(new MoveEvent(EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
     }
 
-    public void pauseGame(ActionEvent actionEvent) {
+    public void pauseGame() {
         SoundManager.getInstance().playButtonClick();
 
         if (isGameOver.get()) {
@@ -463,7 +428,7 @@ public class GuiController implements Initializable {
     }
 
     public void refreshNextBrick(ViewData viewData) {
-        int[][] next = viewData.getNextBrickData();
+        int[][] next = viewData.nextBrickData();
 
         nextBrickPanel.getChildren().clear();
 
@@ -488,13 +453,13 @@ public class GuiController implements Initializable {
         }
         ghostRects.clear();
 
-        int ghostY = brick.getGhostYPosition();
+        int ghostY = brick.ghostYPosition();
         if (ghostY < 0){
             return;
         }
 
-        int[][] data = brick.getBrickData();
-        int x = brick.getxPosition();
+        int[][] data = brick.brickData();
+        int x = brick.xPosition();
 
         for (int row = 0; row < data.length; row++){
             for(int col = 0; col < data[row].length; col++){
@@ -574,7 +539,7 @@ public class GuiController implements Initializable {
     @FXML
     public void onReturnHome(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/homeLayout.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 460, 510);
             stage.setScene(scene);
@@ -585,8 +550,8 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    private void onRespawn(ActionEvent e) {
-        newGame(null);
+    private void onRespawn() {
+        newGame();
     }
 
     @FXML

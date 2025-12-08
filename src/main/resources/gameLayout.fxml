@@ -1,70 +1,64 @@
-<?import com.comp2042.GameOverPanel?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.Separator?>
-
 <StackPane fx:controller="com.comp2042.GuiController"
            fx:id="rootStackPane"
            xmlns:fx="http://javafx.com/fxml">
-    <children>
-            <Pane fx:id="gameRootPane">
-                    <children>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+
+    <Pane fx:id="gameRootPane">
         <HBox spacing="20">
-        <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-            <center>
-                <GridPane fx:id="gamePanel" id="gamePanel" hgap="1" vgap="1"/>
-            </center>
-        </BorderPane>
+            <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+                <center>
+                    <GridPane fx:id="gamePanel" id="gamePanel" hgap="1" vgap="1"/>
+                </center>
+            </BorderPane>
 
-        <VBox spacing="15">
-            <VBox spacing="5" styleClass="score-panel">
-                <Label text="Score" styleClass="score-title"/>
-                <Label fx:id="scoreLabel" text="0" styleClass="score-value"/>
-            </VBox>
+            <VBox spacing="15">
+                <VBox spacing="5" styleClass="score-panel">
+                    <Label text="Score" styleClass="score-title"/>
+                    <Label fx:id="scoreLabel" text="0" styleClass="score-value"/>
+                </VBox>
 
-            <VBox spacing="5">
-                <Label text="Next Brick" styleClass="next-title"/>
-                <GridPane fx:id="nextBrickPanel"
-                          hgap="1"
-                          vgap="1"
-                          styleClass="next-panel"/>
-            </VBox>
+                <VBox spacing="5">
+                    <Label text="Next Brick" styleClass="next-title"/>
+                    <GridPane fx:id="nextBrickPanel"
+                              hgap="1"
+                              vgap="1"
+                              styleClass="next-panel"/>
+                </VBox>
 
-            <VBox spacing="4">
-                <Label fx:id="abilityOneLabel" text="Q: Ready" styleClass="score-title"/>
-                <Label fx:id="abilityTwoLabel" text="E: Ready" styleClass="score-title"/>
-            </VBox>
+                <VBox spacing="4">
+                    <Label fx:id="abilityOneLabel" text="Q: Ready" styleClass="score-title"/>
+                    <Label fx:id="abilityTwoLabel" text="E: Ready" styleClass="score-title"/>
+                </VBox>
 
-            <HBox spacing="10" styleClass="control-panel">
-                <Button text="New Game"
-                        onAction="#newGame"
-                        styleClass="control-button"/>
-                <Button text="Pause"
-                        onAction="#pauseGame"
-                        styleClass="control-button"/>
-            </HBox>
+                <HBox spacing="10" styleClass="control-panel">
+                    <Button text="New Game"
+                            onAction="#newGame"
+                            styleClass="control-button"/>
+                    <Button text="Pause"
+                            onAction="#pauseGame"
+                            styleClass="control-button"/>
+                </HBox>
                 <Button text="Home"
                         onAction="#onReturnHome"
                         styleClass="control-button"/>
-        </VBox>
-    </HBox>
-    <GridPane fx:id="brickPanel"
-              vgap="1" hgap="1"/>
+            </VBox>
+        </HBox>
+        <GridPane fx:id="brickPanel"
+                  vgap="1" hgap="1"/>
 
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203"/>
-    </children>
+        <Group fx:id="groupNotification" layoutX="14" layoutY="203"/>
     </Pane>
 
 
     <BorderPane fx:id="deathOverlay"
                 visible="false"
-                pickOnBounds="true"
                 styleClass="death-overlay">
         <center>
             <VBox alignment="CENTER" spacing="12">
@@ -86,10 +80,4 @@
             </VBox>
         </center>
     </BorderPane>
-    </children>
-
-    <stylesheets>
-        <URL value="@window_style.css"/>
-    </stylesheets>
-
 </StackPane>

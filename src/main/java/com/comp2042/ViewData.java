@@ -1,51 +1,15 @@
 package com.comp2042;
 
-public final class ViewData {
+public record ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int ghostYPosition,
+                       int playerX, int playerY) {
 
-    private final int[][] brickData;
-    private final int xPosition;
-    private final int yPosition;
-    private final int[][] nextBrickData;
-    private final int ghostYPosition;
-
-    private final int playerX;
-    private final int playerY;
-
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int ghostYPosition, int playerX, int playerY) {
-        this.brickData = brickData;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.nextBrickData = nextBrickData;
-        this.ghostYPosition = ghostYPosition;
-        this.playerX = playerX;
-        this.playerY = playerY;
-    }
-
-    public int[][] getBrickData() {
+    @Override
+    public int[][] brickData() {
         return MatrixOperations.copy(brickData);
     }
 
-    public int getxPosition() {
-        return xPosition;
-    }
-
-    public int getyPosition() {
-        return yPosition;
-    }
-
-    public int[][] getNextBrickData() {
+    @Override
+    public int[][] nextBrickData() {
         return MatrixOperations.copy(nextBrickData);
-    }
-
-    public int getGhostYPosition(){
-        return  ghostYPosition;
-    }
-
-    public int getPlayerX(){
-        return playerX;
-    }
-
-    public int getPlayerY(){
-        return playerY;
     }
 }

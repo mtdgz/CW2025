@@ -19,11 +19,6 @@ public class DifficultyController {
     @FXML
     private Button backButton;
 
-    private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
     @FXML
     private void choosePeaceful(ActionEvent event) {
         SoundManager.getInstance().playButtonClick();

@@ -112,7 +112,7 @@ public class SimpleBoard implements Board {
     }
 
     @Override
-    public boolean moveBrickLeft() {
+    public void moveBrickLeft() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         Point p = new Point(currentOffset);
         p.translate(-1, 0);
@@ -123,15 +123,13 @@ public class SimpleBoard implements Board {
                 (int) p.getY()
         );
         if (conflict) {
-            return false;
         } else {
             currentOffset = p;
-            return true;
         }
     }
 
     @Override
-    public boolean moveBrickRight() {
+    public void moveBrickRight() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         Point p = new Point(currentOffset);
         p.translate(1, 0);
@@ -142,15 +140,13 @@ public class SimpleBoard implements Board {
                 (int) p.getY()
         );
         if (conflict) {
-            return false;
         } else {
             currentOffset = p;
-            return true;
         }
     }
 
     @Override
-    public boolean rotateLeftBrick() {
+    public void rotateLeftBrick() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
         NextShapeInfo nextShape = brickRotator.getNextShape();
         boolean conflict = MatrixOperations.intersect(
@@ -160,10 +156,8 @@ public class SimpleBoard implements Board {
                 (int) currentOffset.getY()
         );
         if (conflict) {
-            return false;
         } else {
             brickRotator.setCurrentShape(nextShape.getPosition());
-            return true;
         }
     }
 
@@ -212,7 +206,7 @@ public class SimpleBoard implements Board {
         if (nextBrick != null
                 && nextBrick.getShapeMatrix() != null
                 && !nextBrick.getShapeMatrix().isEmpty()) {
-            nextShape = nextBrick.getShapeMatrix().get(0);
+            nextShape = nextBrick.getShapeMatrix().getFirst();
         } else {
             nextShape = new int[4][4];
         }
@@ -247,9 +241,9 @@ public class SimpleBoard implements Board {
     @Override
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
-        currentGameMatrix = clearRow.getNewMatrix();
+        currentGameMatrix = clearRow.newMatrix();
 
-        int linesRemoved = clearRow.getLinesRemoved();
+        int linesRemoved = clearRow.linesRemoved();
         if (linesRemoved > 0) {
             playerState.addLinesCleared(linesRemoved);
             if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
@@ -340,7 +334,6 @@ public class SimpleBoard implements Board {
         }
 
         playerState.damageBoss(amount);
-        int after = playerState.getBossHp();
 
         // You can refine this to only play on death if you want:
         // if (after <= 0 && before > 0) ...
@@ -413,8 +406,8 @@ public class SimpleBoard implements Board {
             playerState.setPlaceBlockCooldownEnd(now + 2500L);
 
             ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
-            currentGameMatrix = clearRow.getNewMatrix();
-            int linesRemoved = clearRow.getLinesRemoved();
+            currentGameMatrix = clearRow.newMatrix();
+            int linesRemoved = clearRow.linesRemoved();
             if (linesRemoved > 0) {
                 SoundManager.getInstance().playRowElim();
                 playerState.addLinesCleared(linesRemoved);
@@ -425,7 +418,7 @@ public class SimpleBoard implements Board {
                 if (playerState.isBossSpawned() && !playerState.isBossDead()) {
                     damageBossWithSound(linesRemoved * 10);
                 }
-                score.add(clearRow.getScoreBonus());
+                score.add(clearRow.scoreBonus());
             }
 
             playerState.setPlaceBlockCooldownEnd(now + 5000L);
@@ -436,12 +429,12 @@ public class SimpleBoard implements Board {
             AbilityHelper.useAbilityOne(currentGameMatrix, playerState);
             SoundManager.getInstance().playElimBlock();
             ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
-            currentGameMatrix = clearRow.getNewMatrix();
+            currentGameMatrix = clearRow.newMatrix();
 
-            int linesRemoved = clearRow.getLinesRemoved();
+            int linesRemoved = clearRow.linesRemoved();
             if (linesRemoved > 0) {
                 SoundManager.getInstance().playRowElim();
-                score.add(clearRow.getScoreBonus());
+                score.add(clearRow.scoreBonus());
                 playerState.addLinesCleared(linesRemoved);
                 if (!playerState.isBossSpawned() && playerState.getTotalLinesCleared() >= 5) {
                     spawnZombieBoss();

@@ -1,48 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import java.net.URL?>
-
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
+<?import java.net.URL?>
 <StackPane fx:controller="com.comp2042.HomeController"
            fx:id="homeRoot"
            xmlns:fx="https://javafx.com/fxml"
            styleClass="menu-root">
-    <children>
-        <MediaView fx:id="homeBgView"
-                   preserveRatio="false"/>
-<BorderPane>
-    <top>
-        <VBox alignment="CENTER" spacing="4">
-            <Label text="TETRIS" styleClass="menu-title-main"/>
-            <Label text="MINECRAFT EDITION" styleClass="menu-title-sub"/>
-        </VBox>
-    </top>
-
-    <center>
-        <VBox alignment="CENTER" spacing="12">
-            <Button text="Start Game"
-                    onAction="#onStartGame"
-                    styleClass="menu-button"/>
-            <Button text="Choose Difficulty"
-                    onAction="#onChooseDifficulty"
-                    styleClass="menu-button"/>
-            <Button text="Choose Character"
-                    onAction="#onChooseCharacter"
-                    styleClass="menu-button"/>
-        </VBox>
-    </center>
-
-</BorderPane>
-    </children>
 
     <stylesheets>
-        <URL value ="@window_style.css"/>
+        <URL value="@window_style.css"/>
     </stylesheets>
+    <MediaView fx:id="homeBgView"
+               preserveRatio="false"/>
+    <BorderPane>
+        <top>
+            <VBox alignment="CENTER" spacing="4">
+                <Label text="TETRIS" styleClass="menu-title-main"/>
+                <Label text="MINECRAFT EDITION" styleClass="menu-title-sub"/>
+            </VBox>
+        </top>
+
+        <center>
+            <VBox alignment="CENTER" spacing="12">
+                <Button text="Start Game"
+                        onAction="#onStartGame"
+                        styleClass="menu-button"/>
+                <Button text="Choose Difficulty"
+                        onAction="#onChooseDifficulty"
+                        styleClass="menu-button"/>
+                <Button text="Choose Character"
+                        onAction="#onChooseCharacter"
+                        styleClass="menu-button"/>
+            </VBox>
+        </center>
+
+    </BorderPane>
 </StackPane>

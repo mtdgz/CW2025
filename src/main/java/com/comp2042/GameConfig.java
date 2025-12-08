@@ -16,10 +16,6 @@ public final class GameConfig {
         }
     }
 
-    public static Difficulty getSelectedDifficulty() {
-        return selectedDifficulty;
-    }
-
     public static void setSelectedDifficulty(Difficulty difficulty) {
         if(difficulty != null){
             selectedDifficulty = difficulty;

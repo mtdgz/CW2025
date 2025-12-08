@@ -26,8 +26,8 @@ public class GameController implements InputEventListener {
             SoundManager.getInstance().playPlaceBlock();
 
             clearRow = board.clearRows();
-            if (clearRow.getLinesRemoved() > 0) {
-                board.getScore().add(clearRow.getScoreBonus());
+            if (clearRow.linesRemoved() > 0) {
+                board.getScore().add(clearRow.scoreBonus());
                 SoundManager.getInstance().playRowElim();
             }
             if (board.createNewBrick()) {
@@ -38,7 +38,7 @@ public class GameController implements InputEventListener {
             viewGuiController.refreshGameBackground(board.getBoardMatrix());
 
         } else {
-            if (event.getEventSource() == EventSource.USER) {
+            if (event.eventSource() == EventSource.USER) {
                 board.getScore().add(1);
             }
         }

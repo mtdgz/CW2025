@@ -1,7 +1,6 @@
 package com.comp2042.logic.bricks;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.Collections;
 
 public class RandomBrickGenerator implements BrickGenerator {

@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 public class MatrixOperations {
 
-
-    //We don't want to instantiate this utility class
     private MatrixOperations(){
 
     }
@@ -28,10 +26,7 @@ public class MatrixOperations {
     }
 
     private static boolean checkOutOfBound(int[][] matrix, int targetX, int targetY) {
-        boolean returnValue = true;
-        if (targetX >= 0 && targetY < matrix.length && targetX < matrix[targetY].length) {
-            returnValue = false;
-        }
+        boolean returnValue = targetX < 0 || targetY >= matrix.length || targetX >= matrix[targetY].length;
         return returnValue;
     }
 

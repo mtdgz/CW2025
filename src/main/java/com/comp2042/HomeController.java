@@ -8,8 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaErrorEvent;
-import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
@@ -40,6 +38,7 @@ public class HomeController {
         try {
             URL videoUrl = getClass().getResource("/video/home_bg.mp4");
 
+            assert videoUrl != null;
             Media media = new Media(videoUrl.toExternalForm());
 
 

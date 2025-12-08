@@ -6,6 +6,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.net.URL;
 
+@SuppressWarnings("unused")
 public final class SoundManager {
 
     private static final SoundManager INSTANCE = new SoundManager();
@@ -18,18 +19,18 @@ public final class SoundManager {
     private MediaPlayer bgmPlayer;
     private double bgmVolume = 0.6;
 
-    private AudioClip placeBlockClip;
-    private AudioClip elimBlockClip;
-    private AudioClip rowElimClip;
-    private AudioClip playerDieClip;
-    private AudioClip gameEndClip;
-    private AudioClip buttonClickClip;
-    private AudioClip tntPlaceClip;
-    private AudioClip tntExplodeClip;
-    private AudioClip lavaClip;
-    private AudioClip zombieSpawnClip;
-    private AudioClip zombieDeathClip;
-    private AudioClip skeletonSpawnClip;
+    private final AudioClip placeBlockClip;
+    private final AudioClip elimBlockClip;
+    private final AudioClip rowElimClip;
+    private final AudioClip playerDieClip;
+    private final AudioClip gameEndClip;
+    private final AudioClip buttonClickClip;
+    private final AudioClip tntPlaceClip;
+    private final AudioClip tntExplodeClip;
+    private final AudioClip lavaClip;
+    private final AudioClip zombieSpawnClip;
+    private final AudioClip zombieDeathClip;
+    private final AudioClip skeletonSpawnClip;
 
     private double placeBlockVolume   = 1.0;
     private double elimBlockVolume    = 1.0;
@@ -94,12 +95,6 @@ public final class SoundManager {
         if (bgmPlayer != null) {
             bgmPlayer.setVolume(bgmVolume);
             bgmPlayer.play();
-        }
-    }
-
-    public void stopBgm() {
-        if (bgmPlayer != null) {
-            bgmPlayer.stop();
         }
     }
 
@@ -211,7 +206,6 @@ public final class SoundManager {
 
     private double clamp(double v) {
         if (v < 0.0) return 0.0;
-        if (v > 1.0) return 1.0;
-        return v;
+        return Math.min(v, 1.0);
     }
 }

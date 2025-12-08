@@ -1,7 +1,7 @@
 package com.comp2042;
 
 public class PlayerState {
-    private CharacterType characterType;
+    private final CharacterType characterType;
     private int x;
     private int y;
 
@@ -40,10 +40,6 @@ public class PlayerState {
     //character
     public CharacterType getCharacterType() {
         return characterType;
-    }
-
-    public void setCharacterType(CharacterType characterType) {
-        this.characterType = characterType;
     }
 
     //lines/boss
