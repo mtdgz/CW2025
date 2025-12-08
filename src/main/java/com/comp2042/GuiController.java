@@ -573,7 +573,6 @@ public class GuiController implements Initializable {
 
     @FXML
     public void onReturnHome(ActionEvent event) {
-        SoundManager.getInstance().playButtonClick();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/homeLayout.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

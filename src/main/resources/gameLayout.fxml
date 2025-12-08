@@ -11,7 +11,7 @@
 
 <StackPane fx:controller="com.comp2042.GuiController"
            fx:id="rootStackPane"
-      xmlns:fx="http://javafx.com/fxml">
+           xmlns:fx="http://javafx.com/fxml">
     <children>
             <Pane fx:id="gameRootPane">
                     <children>

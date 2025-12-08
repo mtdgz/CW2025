@@ -9,10 +9,15 @@
 <?import javafx.scene.control.Label?>
 <?import java.net.URL?>
 
-<?import java.net.URL?>
-<BorderPane fx:controller="com.comp2042.HomeController"
-            xmlns:fx="https://javafx.com/fxml"
-            styleClass="menu-root">
+<?import javafx.scene.media.MediaView?>
+<StackPane fx:controller="com.comp2042.HomeController"
+           fx:id="homeRoot"
+           xmlns:fx="https://javafx.com/fxml"
+           styleClass="menu-root">
+    <children>
+        <MediaView fx:id="homeBgView"
+                   preserveRatio="false"/>
+<BorderPane>
     <top>
         <VBox alignment="CENTER" spacing="4">
             <Label text="TETRIS" styleClass="menu-title-main"/>
@@ -34,7 +39,10 @@
         </VBox>
     </center>
 
+</BorderPane>
+    </children>
+
     <stylesheets>
         <URL value ="@window_style.css"/>
     </stylesheets>
-</BorderPane>
+</StackPane>

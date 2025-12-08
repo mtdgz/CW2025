@@ -4,7 +4,6 @@ import com.comp2042.logic.bricks.Brick;
 import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
 
-import java.awt.*;
 import java.awt.Point;
 import java.util.Random;
 
@@ -30,20 +29,8 @@ public class SimpleBoard implements Board {
     private int playerX;
     private int playerY;
 
-    private int skeletonTickCounter = 0;
-
-
-    private static class TntEntry {
-        final int x;
-        final int y;
-        final long explodeAt;
-
-        TntEntry(int x, int y, long explodeAt) {
-            this.x = x;
-            this.y = y;
-            this.explodeAt = explodeAt;
-        }
-    }
+    // TNT entry record
+    private record TntEntry(int x, int y, long explodeAt) {}
 
     private final java.util.List<TntEntry> activeTnt = new java.util.ArrayList<>();
     private boolean hasActiveLava = false;
@@ -117,8 +104,8 @@ public class SimpleBoard implements Board {
             return false;
         } else {
             currentOffset = p;
+            // no skeleton spawn here anymore
             tickTnt();
-            bossTick();
             resolveLava();
             return true;
         }
@@ -245,12 +232,16 @@ public class SimpleBoard implements Board {
 
     @Override
     public void mergeBrickToBackground() {
+        // merge falling piece
         currentGameMatrix = MatrixOperations.merge(
                 currentGameMatrix,
                 brickRotator.getCurrentShape(),
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY()
         );
+
+        // 1 skeleton per landed piece, if boss is active
+        spawnSkeletonOnPlacement();
     }
 
     @Override
@@ -289,7 +280,8 @@ public class SimpleBoard implements Board {
         playerX = startX;
         playerY = startY;
 
-        playerState.resetForNewGame(startX,startY);
+        // reset all boss + cooldown + position state inside PlayerState
+        playerState.resetForNewGame(startX, startY);
 
         // reset death & effects
         playerDead = false;
@@ -329,7 +321,6 @@ public class SimpleBoard implements Board {
         return playerState;
     }
 
-
     public boolean isPlayerDead() {
         return playerDead;
     }
@@ -349,17 +340,14 @@ public class SimpleBoard implements Board {
         }
 
         playerState.damageBoss(amount);
-
         int after = playerState.getBossHp();
-        if (after <= 0 && before > 0) {
-            SoundManager.getInstance().playZombieDeath();
-        } else {
-            SoundManager.getInstance().playZombieDeath();
-        }
+
+        // You can refine this to only play on death if you want:
+        // if (after <= 0 && before > 0) ...
+        SoundManager.getInstance().playZombieDeath();
     }
 
     private void spawnZombieBoss() {
-
         int baseY = height - 2;
         int spawnX = width / 2 - 1;
 
@@ -381,7 +369,7 @@ public class SimpleBoard implements Board {
         SoundManager.getInstance().playZombieSpawn();
     }
 
-    private void bossTick() {
+    private void spawnSkeletonOnPlacement() {
         if (!playerState.isBossSpawned() || playerState.isBossDead()) {
             return;
         }
@@ -392,38 +380,6 @@ public class SimpleBoard implements Board {
             for (int x = 0; x < width; x++) {
                 int v = currentGameMatrix[y][x];
 
-                if (v != BLOCK_EMPTY &&
-                        v != BLOCK_ZOMBIE &&
-                        v != BLOCK_SKELETON &&
-                        v != BLOCK_TNT &&
-                        v != BLOCK_LAVA) {
-                    candidates.add(new Point(x, y));
-                }
-            }
-        }
-
-        if (candidates.isEmpty()) {
-            return;
-        }
-
-        java.util.Collections.shuffle(candidates, rng);
-        Point target = candidates.get(0);
-
-        SoundManager.getInstance().playSkeletonSpawn();
-
-        currentGameMatrix[target.y][target.x] = BLOCK_SKELETON;
-    }
-
-    public void onPieceLanded() {
-        if (!playerState.isBossSpawned() || playerState.isBossDead()) {
-            return;
-        }
-
-        java.util.List<Point> candidates = new java.util.ArrayList<>();
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int v = currentGameMatrix[y][x];
                 if (v != BLOCK_EMPTY &&
                         v != BLOCK_ZOMBIE &&
                         v != BLOCK_SKELETON &&
@@ -440,8 +396,11 @@ public class SimpleBoard implements Board {
 
         Point p = candidates.get(rng.nextInt(candidates.size()));
         currentGameMatrix[p.y][p.x] = BLOCK_SKELETON;
+
+        SoundManager.getInstance().playSkeletonSpawn();
     }
 
+    /* ---------------- Abilities ---------------- */
 
     public void useAbilityOne() {
         long now = System.currentTimeMillis();
@@ -466,6 +425,7 @@ public class SimpleBoard implements Board {
                 if (playerState.isBossSpawned() && !playerState.isBossDead()) {
                     damageBossWithSound(linesRemoved * 10);
                 }
+                score.add(clearRow.getScoreBonus());
             }
 
             playerState.setPlaceBlockCooldownEnd(now + 5000L);
@@ -598,7 +558,6 @@ public class SimpleBoard implements Board {
         }
     }
 
-
     private void explodeTnt(int cx, int cy) {
         SoundManager.getInstance().playTntExplode();
 
@@ -615,6 +574,7 @@ public class SimpleBoard implements Board {
 
                 if (v == BLOCK_ZOMBIE) {
                     damageBossWithSound(15);
+                    score.add(200);
                     continue;
                 }
 

@@ -6,16 +6,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaErrorEvent;
+import javafx.scene.media.MediaException;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import jdk.jfr.Event;
 
-import javax.swing.*;
 import java.io.IOException;
-
+import java.net.URL;
 
 public class HomeController {
 
     private Stage stage;
+
+    @FXML
+    private StackPane homeRoot;
+
+    @FXML
+    private MediaView homeBgView;
 
     public void setStage(Stage s) {
         this.stage = s;
@@ -26,8 +36,37 @@ public class HomeController {
     }
 
     @FXML
+    public void initialize() {
+        try {
+            URL videoUrl = getClass().getResource("/video/home_bg.mp4");
+
+            Media media = new Media(videoUrl.toExternalForm());
+
+
+            MediaPlayer player = new MediaPlayer(media);
+            player.setCycleCount(MediaPlayer.INDEFINITE);
+            player.setVolume(0.25);
+
+
+            homeBgView.setMediaPlayer(player);
+
+            homeBgView.setPreserveRatio(false);
+            homeBgView.fitWidthProperty().bind(homeRoot.widthProperty());
+            homeBgView.fitHeightProperty().bind(homeRoot.heightProperty());
+
+            homeBgView.toBack();
+
+            player.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void onStartGame(ActionEvent event) throws IOException {
         SoundManager.getInstance().playButtonClick();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
         Parent root = loader.load();
 
@@ -44,6 +83,7 @@ public class HomeController {
     @FXML
     private void onChooseDifficulty() throws Exception {
         SoundManager.getInstance().playButtonClick();
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/difficultyLayout.fxml"));
         Parent root = loader.load();
@@ -52,13 +92,16 @@ public class HomeController {
         popup.setTitle("Select Difficulty");
         popup.setScene(new Scene(root, 460, 300));
         popup.setResizable(false);
-        popup.initOwner(stage);
+        if (stage != null) {
+            popup.initOwner(stage);
+        }
         popup.showAndWait();
     }
 
     @FXML
     public void onChooseCharacter(ActionEvent event) throws IOException {
         SoundManager.getInstance().playButtonClick();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/characterSelect.fxml"));
         Parent root = loader.load();
 
@@ -68,5 +111,4 @@ public class HomeController {
         stage.setResizable(false);
         stage.show();
     }
-
 }
